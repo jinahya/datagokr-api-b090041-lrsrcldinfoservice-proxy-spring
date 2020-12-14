@@ -1,4 +1,4 @@
-package com.github.jinahya.datagokr.api.b090041.lrsrcldinfoservice.proxy.data.jpa.domain;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -131,6 +131,20 @@ public final class 干支 { // 지지
         public LocalDate getLocalDate() {
             return temporalAccessor;
         }
+    }
+
+    public static 干支 of(final String 干, final String 支) {
+        requireNonNull(干, "干 is null");
+        requireNonNull(支, "支 is null");
+        return of(天干.valueOf(干), 地支.valueOf(支));
+    }
+
+    public static 干支 of(final String 干支) {
+        requireNonNull(干支, "干支 is null");
+        if (干支.length() != 2) {
+            throw new IllegalArgumentException("干支(" +干支 + ").length(" + 干支.length() + ") != 2");
+        }
+        return of(干支.substring(0, 1), 干支.substring(1, 2));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

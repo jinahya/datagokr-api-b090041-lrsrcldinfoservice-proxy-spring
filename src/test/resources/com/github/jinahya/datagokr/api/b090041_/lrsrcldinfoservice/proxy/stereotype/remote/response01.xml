@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL SERVICE.</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <lunDay>30</lunDay>
+        <lunIljin>신묘(辛卯)</lunIljin>
+        <lunLeapmonth>평</lunLeapmonth>
+        <lunMonth>10</lunMonth>
+        <lunNday>30</lunNday>
+        <lunSecha>경자(庚子)</lunSecha>
+        <lunWolgeon>정해(丁亥)</lunWolgeon>
+        <lunYear>2020</lunYear>
+        <solDay>14</solDay>
+        <solJd>2459198</solJd>
+        <solLeapyear>윤</solLeapyear>
+        <solMonth>12</solMonth>
+        <solWeek>월</solWeek>
+        <solYear>2020</solYear>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>1</totalCount>
+  </body>
+</response>

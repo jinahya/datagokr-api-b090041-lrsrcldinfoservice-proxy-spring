@@ -1,4 +1,4 @@
-package com.github.jinahya.datagokr.api.b090041.lrsrcldinfoservice.proxy;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
