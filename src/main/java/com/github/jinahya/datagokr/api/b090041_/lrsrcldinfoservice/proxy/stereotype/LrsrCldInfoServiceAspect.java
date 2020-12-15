@@ -2,8 +2,8 @@ package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereo
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunCalInfo;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.repository.LunCalInfoRepository;
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.remote.RemoteLrsrCldInfoService;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.remote.LunCalInfoItem;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.remote.RemoteLrsrCldInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,21 +24,25 @@ public class LrsrCldInfoServiceAspect {
                     + " && args(solarDate)")
     public Object aroundGetForSolarDate(final ProceedingJoinPoint proceedingJoinPoint, final LocalDate solarDate)
             throws Throwable {
-        log.debug("aroundGetForSolarDate({}, {})", proceedingJoinPoint, solarDate);
-        @SuppressWarnings({"unchecked"})
         final Object proceeded = proceedingJoinPoint.proceed();
+        @SuppressWarnings({"unchecked"})
         final Optional<LunCalInfo> casted = (Optional<LunCalInfo>) proceeded;
-        return casted.orElseGet(() -> {
-            return remoteLrsrCldInfoService.getLunCalInfo(solarDate)
-                    .map(LunCalInfoItem::toLunCalInfo)
-                    .doOnNext(v -> {
-                        final LunCalInfo saved = lunCalInfoRepository.save(v);
-//                        final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-//                            itemRepository.save(v.toItem());
-//                        });
-                    })
-                    .block();
-        });
+        if (casted.isPresent()) {
+            log.debug("returning cased...");
+            return casted;
+        }
+        log.debug("querying to the remote service...");
+        return remoteLrsrCldInfoService.getLunCalInfo(solarDate)
+                .map(LunCalInfoItem::toLunCalInfo)
+                .doOnNext(v -> {
+                    log.debug("saving {}", v);
+                    final LunCalInfo saved = lunCalInfoRepository.save(v);
+                    log.debug("saved: {}", saved);
+//                    final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+//                        final LunCalInfo saved = lunCalInfoRepository.save(v.toItem());
+//                    });
+                })
+                .blockOptional();
     }
 
     private final RemoteLrsrCldInfoService remoteLrsrCldInfoService;

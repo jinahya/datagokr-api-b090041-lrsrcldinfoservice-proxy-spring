@@ -2,7 +2,7 @@ package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereo
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunCalInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 class LunCalInfoServiceIT {
 
-    @Test
+    @RepeatedTest(2)
     void testGetItemForSolarDate() {
         final LocalDate solarDate = LocalDate.now();
         final Optional<LunCalInfo> got = lrsrCldInfoService.getItemForSolarDate(solarDate);

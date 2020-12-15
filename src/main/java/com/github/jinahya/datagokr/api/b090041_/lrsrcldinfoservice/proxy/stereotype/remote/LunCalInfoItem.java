@@ -72,8 +72,7 @@ public class LunCalInfoItem {
         return unmarshal(unmarshaller, node);
     }
 
-    public static void acceptItems(final Document document, final Consumer<? super LunCalInfoItem> consumer)
-            throws XPathExpressionException, JAXBException {
+    public static boolean isResultSuccessful(final Document document) throws XPathExpressionException {
         requireNonNull(document, "document is null");
         final XPath xPath = X_PATH_FACTORY.newXPath();
         final String resultCode = (String) xPath
@@ -89,9 +88,16 @@ public class LunCalInfoItem {
                              + "/*[local-name()='resultMessage'][1]"
                              + "/text()")
                     .evaluate(document, XPathConstants.STRING);
-            throw new IllegalArgumentException(
-                    "unsuccessful resultCode: " + resultCode + ", resultMessage: " + resultMessage);
+            log.error("unsuccessful resultCode: " + resultCode + ", resultMessage: " + resultMessage);
+            return false;
         }
+        return true;
+    }
+
+    public static int acceptItems(final Document document, final Consumer<? super LunCalInfoItem> consumer)
+            throws XPathExpressionException, JAXBException {
+        requireNonNull(document, "document is null");
+        final XPath xPath = X_PATH_FACTORY.newXPath();
         final NodeList nodeList;
         {
             final Element element = (Element) xPath
@@ -103,6 +109,7 @@ public class LunCalInfoItem {
         }
         final JAXBContext context = JAXBContext.newInstance(LunCalInfoItem.class);
         final Unmarshaller unmarshaller = context.createUnmarshaller();
+        int count = 0;
         for (int index = 0; index < nodeList.getLength(); index++) {
             final Node node = nodeList.item(index);
             assert node != null;
@@ -110,7 +117,9 @@ public class LunCalInfoItem {
                 continue;
             }
             consumer.accept(unmarshal(unmarshaller, node));
+            count++;
         }
+        return count;
     }
 
     public static List<LunCalInfoItem> getItems(final Document document)
