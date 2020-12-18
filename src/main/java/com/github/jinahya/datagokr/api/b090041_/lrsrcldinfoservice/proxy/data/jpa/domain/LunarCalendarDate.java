@@ -6,11 +6,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -39,6 +35,25 @@ public class LunarCalendarDate {
         return instance;
     }
 
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return super.toString() + '{'
+               + "solarDate=" + solarDate
+               + ",lunarDate=" + lunarDate
+               + ",secha=" + secha
+               + ",세차=" + get세차()
+               + ",歲次=" + get歲次()
+               + ",wolgeon=" + wolgeon
+               + ",월건=" + get월건()
+               + ",月建=" + get月建()
+               + ",leapMonth=" + isLeapMonth()
+               + ",iljin=" + iljin
+               + ",일진=" + get일진()
+               + ",日辰=" + get日辰()
+               + '}';
+    }
 
     // ------------------------------------------------------------------------------------------------- secha / 세차 / 歲次
     public String getSecha() {
