@@ -1,6 +1,9 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.1'
+    id "com.github.ben-manes.versions" version "0.36.0"
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+//    id 'org.kordamp.gradle.jdeprscan' version '0.9.0'
+//    id 'org.kordamp.gradle.jdeps' version '0.12.0'
+    id 'org.springframework.boot' version '2.4.1'
     id 'java'
 }
 
@@ -15,26 +18,27 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.0.3'
     runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'io.projectreactor:reactor-test'
+    implementation 'jakarta.activation:jakarta.activation-api:1.2.2' // split-package
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+//    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-
-    implementation 'jakarta.activation:jakarta.activation-api:1.2.2'
 }
 
 processResources {
@@ -45,6 +49,15 @@ java {
     modularity.inferModulePath = true
 }
 
+// https://docs.gradle.org/current/userguide/java_testing.html#sec:java_testing_modular
+//def moduleName = "com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.spring"
+//def patchArgs = ["--patch-module", "$moduleName=${tasks.compileJava.destinationDirectory.asFile.get().path}"]
+
+//tasks.compileTestJava {
+//    options.compilerArgs += patchArgs
+//}
+
 test {
     useJUnitPlatform()
+//    jvmArgs += patchArgs
 }

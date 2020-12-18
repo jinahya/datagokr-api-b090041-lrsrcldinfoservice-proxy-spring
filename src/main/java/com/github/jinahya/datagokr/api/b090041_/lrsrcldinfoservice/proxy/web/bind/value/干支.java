@@ -1,4 +1,4 @@
-package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.web.bind.value;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see <a href="https://gist.github.com/onacit/b06c3f33ece93939e55f379ac569f468">GitHub Gist</a>
  */
-public final class 干支 { // 지지
+public final class 干支 { // 간지
 
     /**
      * Constants of <a href="https://en.wikipedia.org/wiki/Heavenly_Stems">Heavenly Stems</a>.

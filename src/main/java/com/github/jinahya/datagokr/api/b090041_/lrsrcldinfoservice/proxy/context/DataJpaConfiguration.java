@@ -1,7 +1,7 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.context;
 
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunCalInfo;
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.repository.LunCalInfoRepository;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.repository.LunarInfoRepository;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackageClasses = {
-                LunCalInfoRepository.class
+                LunarInfoRepository.class
         }
 //        ,
 //        basePackages = {
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         )
 @EntityScan(
         basePackageClasses = {
-                LunCalInfo.class
+                LunarCalendarDate.class
         }
 //        ,
 //        basePackages = {

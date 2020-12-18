@@ -1,11 +1,16 @@
-package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.web.bind.type;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
 
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunCalInfo;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -13,21 +18,27 @@ import java.time.LocalDate;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
+@Entity
+@Table(name = LunarCalendarDate.TABLE_NAME)
 @Setter
 @Getter
 @Slf4j
-public class ItemType { //extends RepresentationModel<ItemType> {
+public class LunarCalendarDate {
 
-    public static ItemType fromItem(final LunCalInfo lunCalInfo) {
-        requireNonNull(lunCalInfo, "item is null");
-        final ItemType instance = new ItemType();
-        instance.setSolarDate(lunCalInfo.getSolarDate());
-        instance.setLunarDate(lunCalInfo.getLunarDate());
-        instance.setSecha(lunCalInfo.getSecha());
-        instance.setWolgeon(lunCalInfo.getWolgeon());
-        instance.setIljin(lunCalInfo.getIljin());
+    public static final String TABLE_NAME = "lunar_calendar_date";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static LunarCalendarDate from(final Response.Body.Item item) {
+        requireNonNull(item, "item is null");
+        final LunarCalendarDate instance = new LunarCalendarDate();
+        instance.setSolarDate(item.getSolarDate());
+        instance.setLunarDate(item.getLunarDate());
+        instance.setSecha(item.getLunSecha());
+        instance.setWolgeon(item.getLunWolgeon());
+        instance.setIljin(item.getLunIljin());
         return instance;
     }
+
 
     // ------------------------------------------------------------------------------------------------- secha / 세차 / 歲次
     public String getSecha() {
@@ -86,22 +97,33 @@ public class ItemType { //extends RepresentationModel<ItemType> {
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
+    @Id
+    @Basic(optional = false)
+    @Column(name = "solar_date", nullable = false, insertable = true, updatable = false)
     private LocalDate solarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
+    @Basic(optional = false)
+    @Column(name = "lunar_date", nullable = false, insertable = true, updatable = false, unique = true)
     private LocalDate lunarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
     @Size(min = 6, max = 6)
     @NotNull
+    @Basic(optional = false)
+    @Column(name = "secha", nullable = false, insertable = true, updatable = false)
     private String secha;
 
     @Size(min = 6, max = 6)
     @Nullable
+    @Basic(optional = true)
+    @Column(name = "wolgeon", nullable = true, insertable = true, updatable = false)
     private String wolgeon;
 
     @Size(min = 6, max = 6)
     @NotNull
+    @Basic(optional = false)
+    @Column(name = "iljin", nullable = false, insertable = true, updatable = false)
     private String iljin;
 }

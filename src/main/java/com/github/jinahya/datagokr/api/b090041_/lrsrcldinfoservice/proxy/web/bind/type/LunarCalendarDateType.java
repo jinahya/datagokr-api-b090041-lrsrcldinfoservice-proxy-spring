@@ -1,29 +1,33 @@
-package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.web.bind.type;
 
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
-@Entity
-@Table(name = LunCalInfo.TABLE_NAME)
 @Setter
 @Getter
 @Slf4j
-public class LunCalInfo {
+public class LunarCalendarDateType { //extends RepresentationModel<ItemType> {
 
-    public static final String TABLE_NAME = "lun_cal_info";
+    public static LunarCalendarDateType fromLunarCalendarDate(final LunarCalendarDate lunarCalendarDate) {
+        requireNonNull(lunarCalendarDate, "lunarCalendarDate is null");
+        final LunarCalendarDateType instance = new LunarCalendarDateType();
+        instance.setSolarDate(lunarCalendarDate.getSolarDate());
+        instance.setLunarDate(lunarCalendarDate.getLunarDate());
+        instance.setSecha(lunarCalendarDate.getSecha());
+        instance.setWolgeon(lunarCalendarDate.getWolgeon());
+        instance.setIljin(lunarCalendarDate.getIljin());
+        return instance;
+    }
 
     // ------------------------------------------------------------------------------------------------- secha / 세차 / 歲次
     public String getSecha() {
@@ -82,33 +86,32 @@ public class LunCalInfo {
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
-    @Id
-    @Basic(optional = false)
-    @Column(name = "solar_date", nullable = false, insertable = true, updatable = false)
     private LocalDate solarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
-    @Basic(optional = false)
-    @Column(name = "lunar_date", nullable = false, insertable = true, updatable = false, unique = true)
     private LocalDate lunarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
     @Size(min = 6, max = 6)
     @NotNull
-    @Basic(optional = false)
-    @Column(name = "secha", nullable = false, insertable = true, updatable = false)
     private String secha;
 
     @Size(min = 6, max = 6)
     @Nullable
-    @Basic(optional = true)
-    @Column(name = "wolgeon", nullable = true, insertable = true, updatable = false)
     private String wolgeon;
 
+    // -----------------------------------------------------------------------------------------------------------------
+    private String 월건;
+
+    private String 月建;
+
+    // -----------------------------------------------------------------------------------------------------------------
     @Size(min = 6, max = 6)
     @NotNull
-    @Basic(optional = false)
-    @Column(name = "iljin", nullable = false, insertable = true, updatable = false)
     private String iljin;
+
+    private String 일진;
+
+    private String 日辰;
 }
