@@ -9,10 +9,14 @@ that this application uses.
 
 See `application.yml.example` and `ehcache-config.xml`.
 
-###  H2 and Ehcache
+### Database and Cache
 
-This application uses H2 and Ehcache.
-(See `ehcache-config.xml` and tune if required.)
+This application requires database and cache. H2 and Ehcache are already added as dependencies. (
+See `ehcache-config.xml` and tune if required.)
+
+#### Cleansing
+
+Old (and new) entries in the database are periodically purged.
 
 ```yaml
 spring:
@@ -32,6 +36,8 @@ spring:
 ```
 
 ### Client
+
+You should provide at least the `...service-key` property.
 
 ```yaml
 datagokr:
@@ -54,9 +60,9 @@ All endpoints `Accept`s `application/json` and `application/x-ndjson`.
 |------|----|-----|
 |`GET`|`/v2/lunar/{year}`|Reads all items in specified `{year}` in lunar calendar|
 |`GET`|`/v2/lunar/{year}/{month}`|Reads all items in specified `{month}` in lunar calendar|
-|`GET`|`/v2/lunar/{year}/{month}/{day}`|Reads an item of specified date in lunar calendar|
-|`GET`|`/v2/lunar/{year}`|Reads all items in specified `{year}` in solar calendar|
-|`GET`|`/v2/lunar/{year}/{month}`|`application/json`, `application/x-ndjson`|Reads all items in specified `{month}` in solar calendar|
-|`GET`|`/v2/lunar/{year}/{month}/{day}`|`application/json`, `application/x-ndjson`|Reads an item of specified date in solar calendar|
+|`GET`|`/v2/lunar/{year}/{month}/{day}`|Reads items of specified date in lunar calendar|
+|`GET`|`/v2/solar/{year}`|Reads all items in specified `{year}` in solar calendar|
+|`GET`|`/v2/solar/{year}/{month}`|Reads all items in specified `{month}` in solar calendar|
+|`GET`|`/v2/solar/{year}/{month}/{day}`|Reads items of specified date in solar calendar|
 
 

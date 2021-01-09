@@ -1,4 +1,4 @@
-package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.context.client;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.context;
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.AbstractLrsrCldInfoServiceClient;
 import lombok.AccessLevel;
