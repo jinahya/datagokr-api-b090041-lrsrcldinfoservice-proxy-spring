@@ -1,4 +1,4 @@
-package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.context;
+package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.context.client;
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.AbstractLrsrCldInfoServiceClient;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.LrsrCldInfoServiceReactiveClient;
@@ -6,7 +6,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -62,11 +61,8 @@ public class LrsrCldInfoServiceClientReactiveConfiguration extends AbstractLrsrC
                     log.debug("filtering with {} and {}", r, n);
                     return n.exchange(r);
                 })
-                .baseUrl(AbstractLrsrCldInfoServiceClient.BASE_URL)
+                .baseUrl(AbstractLrsrCldInfoServiceClient.BASE_URL_PRODUCTION)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML_VALUE)
                 .build();
     }
-
-    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.service-key}")
-    private String serviceKey;
 }

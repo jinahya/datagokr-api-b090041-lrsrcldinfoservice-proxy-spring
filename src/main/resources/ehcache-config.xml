@@ -1,0 +1,72 @@
+<config xmlns='http://www.ehcache.org/v3'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'>
+
+  <service>
+    <jsr107:defaults enable-statistics="true"/>
+  </service>
+
+  <!-- ============================================================================================================= -->
+
+  <cache alias="itemsForSolarDate">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="itemsForSolarYearMonth">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">128</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="itemsForSolarYear">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">16</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+  <!-- ============================================================================================================= -->
+
+  <cache alias="itemsForLunarDate">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="itemsForLunarYearMonth">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="itemsForLunarYear">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">16</heap>
+      <offheap unit="MB">16</offheap>
+    </resources>
+  </cache>
+
+</config>

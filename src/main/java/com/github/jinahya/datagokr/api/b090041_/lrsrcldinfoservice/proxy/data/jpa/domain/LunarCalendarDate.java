@@ -1,144 +1,213 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-
-import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
+import java.time.Month;
+import java.time.Year;
+import java.time.YearMonth;
+import java.util.Objects;
 
 @Entity
-@Table(name = LunarCalendarDate.TABLE_NAME)
+@Table(name = LunarCalendarDate.TABLE_NAME,
+       uniqueConstraints = {
+               @UniqueConstraint(columnNames = {
+                       LunarCalendarDate.COLUMN_NAME_LUNAR_YEAR,
+                       LunarCalendarDate.COLUMN_NAME_LUNAR_MONTH,
+                       LunarCalendarDate.COLUMN_NAME_LUNAR_DAY,
+                       LunarCalendarDate.COLUMN_NAME_LUNAR_LEAP_MONTH
+               })
+       }
+)
 @Setter
 @Getter
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(access = AccessLevel.PACKAGE)
 @Slf4j
 public class LunarCalendarDate {
 
     public static final String TABLE_NAME = "lunar_calendar_date";
 
+    // ------------------------------------------------------------------------------------------ solar_date / solarDate
+    public static final String COLUMN_NAME_SOLAR_DATE = "solar_date";
+
+    public static final String ATTRIBUTE_NAE_SOLAR_DATE = "solarDate";
+
+    // ------------------------------------------------------------------------------------------ lunar_year / lunarYear
+    public static final String COLUMN_NAME_LUNAR_YEAR = "lunar_year";
+
+    public static final String ATTRIBUTE_NAE_LUNAR_YEAR = "lunarYear";
+
+    // ---------------------------------------------------------------------------------------- lunar_month / lunarMonth
+    public static final String COLUMN_NAME_LUNAR_MONTH = "lunar_month";
+
+    public static final String ATTRIBUTE_NAE_LUNAR_MONTH = "lunarMonth";
+
+    // -------------------------------------------------------------------------------------------- lunar_day / lunarDay
+    public static final String COLUMN_NAME_LUNAR_DAY = "lunar_day";
+
+    public static final String ATTRIBUTE_NAE_LUNAR_DAY = "lunarDay";
+
+    // ------------------------------------------------------------------------------------------------------- lunarDate
+    public static final String ATTRIBUTE_NAME_LUNAR_DATE = "lunarDate";
+
+    // ------------------------------------------------------------------------------- lunar_leap_month / lunarLeapMonth
+    public static final String COLUMN_NAME_LUNAR_LEAP_MONTH = "lunar_leap_month";
+
+    public static final String ATTRIBUTE_NAME_LUNAR_LEAP_MONTH = "lunarLeapMonth";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_LUNAR_GANZHI_YEAR = "lunar_ganzhi_year";
+
+    public static final String ATTRIBUTE_NAME_LUNAR_GANZHI_YEAR = "lunarGanzhiYear";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_LUNAR_GANZHI_MONTH = "lunar_ganzhi_month";
+
+    public static final String ATTRIBUTE_NAME_LUNAR_GANZHI_MONTH = "lunarGanzhiMonth";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_LUNAR_GANZHI_DAY = "lunar_ganzhi_day";
+
+    public static final String ATTRIBUTE_NAME_LUNAR_GANZHI_DAY = "lunarGanzhiDay";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_MONTH_LUNAR = "month_lunar";
+
+    public static final String ATTRIBUTE_NAME_MONTH_LUNAR = "monthLunar";
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_MONTH_SOLAR = "month_solar";
+
+    public static final String ATTRIBUTE_NAME_MONTH_SOLAR = "monthSolar";
+
     // -----------------------------------------------------------------------------------------------------------------
     public static LunarCalendarDate from(final Response.Body.Item item) {
-        requireNonNull(item, "item is null");
+        Objects.requireNonNull(item, "item is null");
         final LunarCalendarDate instance = new LunarCalendarDate();
         instance.setSolarDate(item.getSolarDate());
-        instance.setLunarDate(item.getLunarDate());
-        instance.setSecha(item.getLunSecha());
-        instance.setWolgeon(item.getLunWolgeon());
-        instance.setIljin(item.getLunIljin());
+        instance.setLunarYear(item.getLunarYear().getValue());
+        instance.setLunarMonth(item.getLunarMonth());
+        instance.setLunarDay(item.getLunarDayOfMonth());
+        instance.setLunarLeapMonth(item.getLunarLeapMonth());
+        instance.setLunarGanzhiYear(item.getLunSecha());
+        instance.setLunarGanzhiMonth(item.getLunWolgeon());
+        instance.setLunarGanzhiDay(item.getLunIljin());
         return instance;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    public LunarCalendarDate() {
+        super();
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
+    public Response.Body.Item toItem() {
+        final Response.Body.Item instance = new Response.Body.Item();
+        instance.setSolarDate(solarDate);
+        instance.setLunarYear(Year.of(lunarYear));
+        instance.setLunarMonth(lunarMonth);
+        instance.setLunarDayOfMonth(lunarDay);
+        instance.setLunarLeapMonth(isLunarLeapMonth());
+        instance.setLunSecha(getLunarGanzhiYear());
+        instance.setLunWolgeon(getLunarGanzhiMonth());
+        instance.setLunIljin(getLunarGanzhiDay());
+        return instance;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
     @Override
     public String toString() {
         return super.toString() + '{'
                + "solarDate=" + solarDate
-               + ",lunarDate=" + lunarDate
-               + ",secha=" + secha
-               + ",세차=" + get세차()
-               + ",歲次=" + get歲次()
-               + ",wolgeon=" + wolgeon
-               + ",월건=" + get월건()
-               + ",月建=" + get月建()
-               + ",leapMonth=" + isLeapMonth()
-               + ",iljin=" + iljin
-               + ",일진=" + get일진()
-               + ",日辰=" + get日辰()
+               + ",lunarYear=" + lunarYear
+               + ",lunarMonth=" + lunarMonth
+               + ",lunarDay=" + lunarDay
+               + ",lunarLeapMonth=" + lunarLeapMonth
+               + ",lunarGanzhiYear=" + lunarGanzhiYear
+               + ",lunarGanzhiMonth=" + lunarGanzhiMonth
+               + ",lunarGanzhiDay=" + lunarGanzhiDay
+               + ",groupLunar=" + monthLunar
+               + ",groupSolar=" + monthSolar
                + '}';
-    }
-
-    // ------------------------------------------------------------------------------------------------- secha / 세차 / 歲次
-    public String getSecha() {
-        return secha;
-    }
-
-    public void setSecha(final String secha) {
-        this.secha = secha;
-    }
-
-    public String get세차() {
-        return ofNullable(getSecha()).map(v -> v.substring(0, 2)).orElse(null);
-    }
-
-    public String get歲次() {
-        return ofNullable(getSecha()).map(v -> v.substring(3, 5)).orElse(null);
-    }
-
-    // ----------------------------------------------------------------------------------------------- wolgeon / 월건 / 月建
-    public String getWolgeon() {
-        return wolgeon;
-    }
-
-    public void setWolgeon(final String wolgeon) {
-        this.wolgeon = wolgeon;
-    }
-
-    public String get월건() {
-        return ofNullable(getWolgeon()).map(v -> v.substring(0, 2)).orElse(null);
-    }
-
-    public String get月建() {
-        return ofNullable(getWolgeon()).map(v -> v.substring(3, 5)).orElse(null);
-    }
-
-    public boolean isLeapMonth() {
-        return getWolgeon() == null;
-    }
-
-    // ------------------------------------------------------------------------------------------------- iljin / 일진 / 日辰
-    public String getIljin() {
-        return iljin;
-    }
-
-    public void setIljin(final String iljin) {
-        this.iljin = iljin;
-    }
-
-    public String get일진() {
-        return ofNullable(getIljin()).map(v -> v.substring(0, 2)).orElse(null);
-    }
-
-    public String get日辰() {
-        return ofNullable(getIljin()).map(v -> v.substring(3, 5)).orElse(null);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
     @Id
     @Basic(optional = false)
-    @Column(name = "solar_date", nullable = false, insertable = true, updatable = false)
+    @Column(name = COLUMN_NAME_SOLAR_DATE, nullable = false, insertable = true, updatable = false)
     private LocalDate solarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
     @NotNull
     @Basic(optional = false)
-    @Column(name = "lunar_date", nullable = false, insertable = true, updatable = false, unique = true)
-    private LocalDate lunarDate;
+    @Column(name = COLUMN_NAME_LUNAR_YEAR, nullable = false, insertable = true, updatable = false)
+    private int lunarYear;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @NotNull
+    @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = COLUMN_NAME_LUNAR_MONTH, nullable = false, insertable = true, updatable = false)
+    private Month lunarMonth;
+
+    @Max(31)
+    @Min(1)
+    @Basic(optional = false)
+    @Column(name = COLUMN_NAME_LUNAR_DAY, nullable = false, insertable = true, updatable = false)
+    private int lunarDay;
+
+    @Basic(optional = false)
+    @Column(name = COLUMN_NAME_LUNAR_LEAP_MONTH, nullable = false, insertable = true, updatable = false)
+    private boolean lunarLeapMonth;
+
     @Size(min = 6, max = 6)
     @NotNull
     @Basic(optional = false)
-    @Column(name = "secha", nullable = false, insertable = true, updatable = false)
-    private String secha;
+    @Column(name = COLUMN_NAME_LUNAR_GANZHI_YEAR, nullable = false, insertable = true, updatable = false)
+    private String lunarGanzhiYear;
 
     @Size(min = 6, max = 6)
     @Nullable
     @Basic(optional = true)
-    @Column(name = "wolgeon", nullable = true, insertable = true, updatable = false)
-    private String wolgeon;
+    @Column(name = COLUMN_NAME_LUNAR_GANZHI_MONTH, nullable = true, insertable = true, updatable = false)
+    private String lunarGanzhiMonth;
 
     @Size(min = 6, max = 6)
     @NotNull
     @Basic(optional = false)
-    @Column(name = "iljin", nullable = false, insertable = true, updatable = false)
-    private String iljin;
+    @Column(name = COLUMN_NAME_LUNAR_GANZHI_DAY, nullable = false, insertable = true, updatable = false)
+    private String lunarGanzhiDay;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Basic(optional = true)
+    @Convert(converter = YearMonthAttributeConverter.class)
+    @Column(name = COLUMN_NAME_MONTH_LUNAR, nullable = true, insertable = true, updatable = true)
+    private YearMonth monthLunar;
+
+    @Basic(optional = true)
+    @Convert(converter = YearMonthAttributeConverter.class)
+    @Column(name = COLUMN_NAME_MONTH_SOLAR, nullable = true, insertable = true, updatable = true)
+    private YearMonth monthSolar;
 }

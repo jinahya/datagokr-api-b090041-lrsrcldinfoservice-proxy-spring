@@ -1,0 +1,29 @@
+spring:
+  cache:
+    jcache:
+      config: classpath:ehcache-config.xml
+  datasource:
+    driverClassName: org.h2.Driver
+    password: password
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    com.github.jinahya: INFO
+
+client:
+  datagokr:
+    api:
+      b090041:
+        lrsrcldinfoservice:
+          client:
+            connect-timeout-millis: 2000
+            write-timeout-seconds: 2
+            read-timeout-second: 10
+            service-key: ...==
