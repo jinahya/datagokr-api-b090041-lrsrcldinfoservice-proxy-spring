@@ -7,7 +7,31 @@ that this application uses.
 
 ## Application properties
 
-See `application.yml.example`.
+See `application.yml.example` and `ehcache-config.xml`.
+
+###  H2 and Ehcache
+
+This application uses H2 and Ehcache.
+(See `ehcache-config.xml` and tune if required.)
+
+```yaml
+spring:
+  cache:
+    jcache:
+      config: classpath:ehcache-config.xml
+  datasource:
+    driverClassName: org.h2.Driver
+    password: password
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+```
+
+### Client
 
 ```yaml
 datagokr:
@@ -15,11 +39,11 @@ datagokr:
     b090041:
       lrsrcldinfoservice:
         client:
-          base-url: ... # defaults to http://.../LrsrCldInfoService
-          connect-timeout-millis: ... # defaults to 20
-          write-timeout-seconds: ... # defaults to 2
-          read-timeout-seconds: ... # defaults to 10
-          service-key: ... # REQUIRED
+          base-url: ...               # defaults to http://.../LrsrCldInfoService
+          connect-timeout-millis: ... # defaults to 2000
+          write-timeout-seconds: ...  # defaults to 2
+          read-timeout-seconds: ...   # defaults to 10
+          service-key: ...            # REQUIRED
 ```
 
 ## Application endpoints
@@ -34,4 +58,5 @@ All endpoints `Accept`s `application/json` and `application/x-ndjson`.
 |`GET`|`/v2/lunar/{year}`|Reads all items in specified `{year}` in solar calendar|
 |`GET`|`/v2/lunar/{year}/{month}`|`application/json`, `application/x-ndjson`|Reads all items in specified `{month}` in solar calendar|
 |`GET`|`/v2/lunar/{year}/{month}/{day}`|`application/json`, `application/x-ndjson`|Reads an item of specified date in solar calendar|
+
 
