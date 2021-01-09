@@ -22,35 +22,35 @@ abstract class AbstractLrsrCldInfoServiceClientConfiguration {
     }
 
     @NotBlank
-    @Value("${client.datagokr.api.b090041.lrsrcldinfoservice.client.base-url:#{T(com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.AbstractLrsrCldInfoServiceClient).BASE_URL_PRODUCTION}}")
+    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.base-url:#{T(com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.AbstractLrsrCldInfoServiceClient).BASE_URL_PRODUCTION}}")
     @Accessors(fluent = true)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.PROTECTED)
     private String baseUrl;
 
     @Positive
-    @Value("${client.datagokr.api.b090041.lrsrcldinfoservice.client.connect-timeout-millis:4000}")
+    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.connect-timeout-millis:4000}")
     @Accessors(fluent = true)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.PROTECTED)
     private int connectTimeoutMillis;
 
     @Positive
-    @Value("${client.datagokr.api.b090041.lrsrcldinfoservice.client.write-timeout-seconds:4}")
+    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.write-timeout-seconds:4}")
     @Accessors(fluent = true)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.PROTECTED)
     private int writeTimeoutSeconds;
 
     @Positive
-    @Value("${client.datagokr.api.b090041.lrsrcldinfoservice.client.read-timeout-seconds:4}")
+    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.read-timeout-seconds:4}")
     @Accessors(fluent = true)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.PROTECTED)
     private int readTimeoutSeconds;
 
     @NotBlank
-    @Value("${client.datagokr.api.b090041.lrsrcldinfoservice.client.service-key}")
+    @Value("${datagokr.api.b090041.lrsrcldinfoservice.client.service-key}")
     @Accessors(fluent = true)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.PROTECTED)

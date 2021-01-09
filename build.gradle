@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.2-SNAPSHOT'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.2'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
     implementation 'javax.cache:cache-api'
@@ -30,7 +30,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-//    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

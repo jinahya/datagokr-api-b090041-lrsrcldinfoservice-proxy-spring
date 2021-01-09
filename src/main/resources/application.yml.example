@@ -17,13 +17,12 @@ logging:
   level:
     com.github.jinahya: INFO
 
-client:
-  datagokr:
-    api:
-      b090041:
-        lrsrcldinfoservice:
-          client:
-            connect-timeout-millis: 2000
-            write-timeout-seconds: 2
-            read-timeout-second: 10
-            service-key: ...==
+datagokr:
+  api:
+    b090041:
+      lrsrcldinfoservice:
+        client:
+          connect-timeout-millis: 2000
+          write-timeout-seconds: 2
+          read-timeout-second: 10
+          service-key: ...==
