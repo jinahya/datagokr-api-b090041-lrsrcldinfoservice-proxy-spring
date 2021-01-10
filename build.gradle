@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.2'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.3'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
     implementation 'javax.cache:cache-api'
