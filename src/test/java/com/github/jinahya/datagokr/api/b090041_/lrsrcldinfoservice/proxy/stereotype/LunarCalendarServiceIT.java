@@ -69,35 +69,6 @@ class LunarCalendarServiceIT {
 //                                           AdditionalAnswers.delegatesTo(lrsrCldInfoServiceClient));
     }
 
-    //    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    void getItemsForSolarDate_() {
-        final LocalDate solarDate = LocalDate.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarDate(solarDate);
-        assertThat(items).isNotNull().isNotEmpty().allSatisfy(i -> {
-            assertThat(i).isNotNull();
-        });
-    }
-
-    @Test
-    void getItemsForSolarYearMonth_() {
-        final YearMonth solarYearMonth = YearMonth.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYearMonth(solarYearMonth);
-        assertThat(items).isNotNull().isNotEmpty().doesNotContainNull().allSatisfy(i -> {
-            assertThat(i.getSolarYear().getValue()).isEqualTo(solarYearMonth.getYear());
-            assertThat(i.getSolarMonth()).isNotNull().isEqualTo(solarYearMonth.getMonth());
-        });
-    }
-
-    @Test
-    void getItemsForSolarYear_() {
-        final Year solarYear = Year.now().minus(1L, ChronoUnit.YEARS);
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYear(solarYear);
-        assertThat(items).isNotNull().isNotEmpty().doesNotContainNull().allSatisfy(i -> {
-            assertThat(i.getSolarYear()).isEqualTo(solarYear);
-        });
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     void getItemsForLunarDate() {
@@ -111,10 +82,16 @@ class LunarCalendarServiceIT {
     void getItemsForLunarYearMonth() {
         final YearMonth lunarYearMonth = YearMonth.now();
         final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarYearMonth(lunarYearMonth);
-        assertThat(items).isNotNull().isNotEmpty().doesNotContainNull().allSatisfy(i -> {
-            assertThat(i.getLunarYear().getValue()).isEqualTo(lunarYearMonth.getYear());
-            assertThat(i.getLunarMonth()).isNotNull().isEqualTo(lunarYearMonth.getMonth());
-        });
+        assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .doesNotContainNull()
+                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_LUNAR)
+                .allSatisfy(i -> {
+                    assertThat(i.getLunarYear().getValue()).isEqualTo(lunarYearMonth.getYear());
+                    assertThat(i.getLunarMonth()).isNotNull().isEqualTo(lunarYearMonth.getMonth());
+                })
+        ;
     }
 
     @Test
@@ -142,9 +119,62 @@ class LunarCalendarServiceIT {
     void getItemsForLunarYear_() {
         final Year lunarYear = Year.now().minus(1L, ChronoUnit.YEARS);
         final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarYear(lunarYear);
-        assertThat(items).isNotNull().isNotEmpty().doesNotContainNull().allSatisfy(i -> {
-            assertThat(i.getLunarYear()).isEqualTo(lunarYear);
-        });
+        assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .doesNotContainNull()
+                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_LUNAR)
+                .allSatisfy(i -> {
+                    assertThat(i.getLunarYear()).isEqualTo(lunarYear);
+                })
+        ;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void getItemsForSolarDate_() {
+        final LocalDate solarDate = LocalDate.now();
+        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarDate(solarDate);
+        assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .doesNotContainNull()
+                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .allSatisfy(i -> {
+                    assertThat(i).isNotNull();
+                })
+        ;
+    }
+
+    @Test
+    void getItemsForSolarYearMonth_() {
+        final YearMonth solarYearMonth = YearMonth.now();
+        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYearMonth(solarYearMonth);
+        assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .doesNotContainNull()
+                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .allSatisfy(i -> {
+                    assertThat(i.getSolarYear().getValue()).isEqualTo(solarYearMonth.getYear());
+                    assertThat(i.getSolarMonth()).isNotNull().isEqualTo(solarYearMonth.getMonth());
+                })
+        ;
+    }
+
+    @Test
+    void getItemsForSolarYear_() {
+        final Year solarYear = Year.now().minus(1L, ChronoUnit.YEARS);
+        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYear(solarYear);
+        assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .doesNotContainNull()
+                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .allSatisfy(i -> {
+                    assertThat(i.getSolarYear()).isEqualTo(solarYear);
+                })
+        ;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

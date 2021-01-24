@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class LunarCalendarV2ControllerIT {
+class LunarCalendarControllerIT {
 
     @Test
     void getV2LunarYear_200Ok_ThisYear() throws Exception {

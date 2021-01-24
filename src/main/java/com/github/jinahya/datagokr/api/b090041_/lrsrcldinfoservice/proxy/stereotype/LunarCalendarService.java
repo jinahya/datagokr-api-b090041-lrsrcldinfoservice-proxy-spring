@@ -27,55 +27,30 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MAX_DAY_OF_MONTH_LUNAR;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MIN_DAY_OF_MONTH_LUNAR;
+
 @Validated
 @Service
 @Slf4j
 public class LunarCalendarService {
-
-    // --------------------------------------------------------------------------------------------- getItemsForSolar...
-    @Cacheable(cacheNames = {"itemsForSolarDate"})
-    public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarDate(@NotNull final LocalDate solarDate) {
-        return lrsrCldInfoServiceClient.getLunCalInfo(solarDate);
-    }
-
-    @Cacheable(cacheNames = {"itemsForSolarYearMonth"})
-    @Transactional
-    public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarYearMonth(@NotNull final YearMonth solarYearMonth) {
-        return lrsrCldInfoServiceClient.getLunCalInfo(solarYearMonth);
-    }
-
-    @Cacheable(cacheNames = {"itemsForSolarYear"})
-    @Transactional
-    public @NotNull @NotEmpty List<@Valid @NotNull Item> getItemsForSolarYear(@NotNull final Year solarYear) {
-        return Arrays
-                .stream(Month.values())
-                .map(m -> YearMonth.of(solarYear.getValue(), m))
-                .<Supplier<List<Item>>>map(m -> () -> lunarCalendarService.getItemsForSolarYearMonth(m))
-                .map(CompletableFuture::supplyAsync)
-                .map(f -> {
-                    try {
-                        return f.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-    }
 
     // ---------------------------------------------------------------------------------------------- getItemsByLunar...
     @Cacheable(cacheNames = {"itemsForLunarDate"})
     @Transactional
     public @NotNull List<@Valid @NotNull Item> getItemsForLunarDate(
             @NotNull final Year lunarYear, @NotNull final Month lunarMonth,
-            @Max(30) @Min(1) final int lunarDayOfMonth) {
+            @Max(MAX_DAY_OF_MONTH_LUNAR) @Min(MIN_DAY_OF_MONTH_LUNAR) final int lunarDayOfMonth) {
         return lrsrCldInfoServiceClient.getSolCalInfo(lunarYear, lunarMonth, lunarDayOfMonth);
     }
 
     @Cacheable(cacheNames = {"itemsForLunarYearMonth"})
     @Transactional
     public @NotEmpty List<@Valid @NotNull Item> getItemsForLunarYearMonth(@NotNull final YearMonth lunarYearMonth) {
-        return lrsrCldInfoServiceClient.getSolCalInfo(lunarYearMonth);
+        return lrsrCldInfoServiceClient.getSolCalInfo(lunarYearMonth)
+                .stream()
+                .sorted(Item.COMPARING_IN_LUNAR)
+                .collect(Collectors.toList());
     }
 
     @Cacheable(cacheNames = {"itemsForLunarYear"})
@@ -94,6 +69,42 @@ public class LunarCalendarService {
                     }
                 })
                 .flatMap(Collection::stream)
+//                .sorted(Item.COMPARING_IN_LUNAR)
+                .collect(Collectors.toList());
+    }
+
+    // --------------------------------------------------------------------------------------------- getItemsForSolar...
+    @Cacheable(cacheNames = {"itemsForSolarDate"})
+    public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarDate(@NotNull final LocalDate solarDate) {
+        return lrsrCldInfoServiceClient.getLunCalInfo(solarDate);
+    }
+
+    @Cacheable(cacheNames = {"itemsForSolarYearMonth"})
+    @Transactional
+    public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarYearMonth(@NotNull final YearMonth solarYearMonth) {
+        return lrsrCldInfoServiceClient.getLunCalInfo(solarYearMonth)
+                .stream()
+                .sorted(Item.COMPARING_IN_SOLAR)
+                .collect(Collectors.toList());
+    }
+
+    @Cacheable(cacheNames = {"itemsForSolarYear"})
+    @Transactional
+    public @NotNull @NotEmpty List<@Valid @NotNull Item> getItemsForSolarYear(@NotNull final Year solarYear) {
+        return Arrays
+                .stream(Month.values())
+                .map(m -> YearMonth.of(solarYear.getValue(), m))
+                .<Supplier<List<Item>>>map(m -> () -> lunarCalendarService.getItemsForSolarYearMonth(m))
+                .map(CompletableFuture::supplyAsync)
+                .map(f -> {
+                    try {
+                        return f.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .flatMap(Collection::stream)
+//                .sorted(Item.COMPARING_IN_SOLAR)
                 .collect(Collectors.toList());
     }
 

@@ -23,21 +23,28 @@ repositories {
 
 ext {
     springdocVersion = '1.5.2'
+    ioSwaggerCoreV3Version = '2.1.6'
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.4'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.5-SNAPSHOT'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
 //    implementation "io.springfox:springfox-bean-validators:3.0.0"
 //    implementation "io.springfox:springfox-boot-starter:3.0.0"
+//    implementation "io.swagger.core.v3:swagger-core:$ioSwaggerCoreV3Version"
     implementation 'javax.cache:cache-api'
     runtimeOnly 'org.ehcache:ehcache'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+//    implementation "org.springdoc:springdoc-openapi-common:$springdocVersion"
+//    implementation "org.springdoc:springdoc-openapi-hateoas:$springdocVersion"
     implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"
+//    implementation "org.springdoc:springdoc-openapi-webmvc-core:$springdocVersion"
+//    implementation "org.springdoc:springdoc-openapi-webflux-core:$springdocVersion"
+//    implementation "org.springdoc:springdoc-openapi-webflux-ui:$springdocVersion"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
