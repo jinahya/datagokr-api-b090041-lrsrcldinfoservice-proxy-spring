@@ -1,6 +1,6 @@
 plugins {
     id "com.github.ben-manes.versions" version "0.36.0"
-    id 'io.spring.dependency-management' version '1.0.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.4.2'
     id 'java'
 }
@@ -22,12 +22,12 @@ repositories {
 }
 
 ext {
-    springdocVersion = '1.5.2'
+    springdocVersion = '1.5.3'
     ioSwaggerCoreV3Version = '2.1.6'
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.3.5-SNAPSHOT'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.4.1-sNAPSHOT'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
 //    implementation "io.springfox:springfox-bean-validators:3.0.0"
