@@ -12,13 +12,14 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.TemporalAmount;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mapstruct.factory.Mappers.getMapper;
 
@@ -31,6 +32,13 @@ class LunarCalendarDateRepositoryTest {
                 .map(getMapper(LunarCalendarDateMapper.class)::fromItem);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    @PostConstruct
+    private void onPostConstruct() {
+        lunarCalendarDateMapper = Mappers.getMapper(LunarCalendarDateMapper.class);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @MethodSource("entities")
     @ParameterizedTest
     void save_(final LunarCalendarDate entity) {
@@ -40,7 +48,7 @@ class LunarCalendarDateRepositoryTest {
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     void deleteAllBySolarDateIsLessThan() {
-        final List<Item> items = ResponseResources.items().collect(Collectors.toList());
+        final List<Item> items = ResponseResources.items().collect(toList());
         items.stream()
                 .map(lunarCalendarDateMapper::fromItem)
                 .peek(v -> v.setSolarDate(v.getSolarDate().minusDays(365L)))
@@ -52,7 +60,7 @@ class LunarCalendarDateRepositoryTest {
     @Test
     void deleteAllBySolarDateIsLessThanLimitNative() {
         final TemporalAmount period = Period.ofDays(10);
-        final List<Item> items = ResponseResources.items().collect(Collectors.toList());
+        final List<Item> items = ResponseResources.items().collect(toList());
         items.stream()
                 .map(lunarCalendarDateMapper::fromItem)
                 .peek(v -> v.setSolarDate(v.getSolarDate().minusDays(365L)))
@@ -64,6 +72,5 @@ class LunarCalendarDateRepositoryTest {
     @Autowired
     private LunarCalendarDateRepository lunarCalendarDateRepository;
 
-    @Autowired
     private LunarCalendarDateMapper lunarCalendarDateMapper;
 }

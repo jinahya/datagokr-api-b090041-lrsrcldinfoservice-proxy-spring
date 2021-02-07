@@ -28,7 +28,7 @@ class V2ControllerIT {
         final String solDay = Integer.toString(now.getDayOfMonth());
         mockMvc.perform(get("/v1/getLunCalInfo")
                                 .queryParam(QUERY_PARAM_NAME_SOL_YEAR, solYear)
-                                .queryParam(QUERY_PARAM_NAME_SOL_MONTH,solMonth)
+                                .queryParam(QUERY_PARAM_NAME_SOL_MONTH, solMonth)
                                 .queryParam(QUERY_PARAM_NAME_SOL_DAY, solDay)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

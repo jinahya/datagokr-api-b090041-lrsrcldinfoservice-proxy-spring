@@ -49,7 +49,7 @@ public class LunarCalendarService {
     public @NotEmpty List<@Valid @NotNull Item> getItemsForLunarYearMonth(@NotNull final YearMonth lunarYearMonth) {
         return lrsrCldInfoServiceClient.getSolCalInfo(lunarYearMonth)
                 .stream()
-                .sorted(Item.COMPARING_IN_LUNAR)
+                .sorted(Item.comparingInLunarLeapMonthFirst)
                 .collect(Collectors.toList());
     }
 

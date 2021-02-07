@@ -2,7 +2,6 @@ package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereo
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.LrsrCldInfoServiceClient;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item;
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.Application;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -87,7 +86,7 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.COMPARING_IN_LUNAR)
+                .isSortedAccordingTo(Item.comparingInLunarLeapMonthFirst)
                 .allSatisfy(i -> {
                     assertThat(i.getLunarYear().getValue()).isEqualTo(lunarYearMonth.getYear());
                     assertThat(i.getLunarMonth()).isNotNull().isEqualTo(lunarYearMonth.getMonth());
@@ -124,7 +123,7 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.COMPARING_IN_LUNAR)
+                .isSortedAccordingTo(Item.comparingInLunarLeapMonthFirst)
                 .allSatisfy(i -> {
                     assertThat(i.getLunarYear()).isEqualTo(lunarYear);
                 })
