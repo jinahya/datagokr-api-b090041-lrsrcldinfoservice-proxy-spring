@@ -1,6 +1,5 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.web.bind;
 
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +20,19 @@ import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
 
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MAX_DAY_OF_MONTH_LUNAR;
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MAX_DAY_OF_MONTH_SOLAR;
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MIN_DAY_OF_MONTH_LUNAR;
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response.Body.Item.MIN_DAY_OF_MONTH_SOLAR;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MAX_DAY_OF_MONTH_LUNAR;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MAX_DAY_OF_MONTH_SOLAR;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MIN_DAY_OF_MONTH_LUNAR;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MIN_DAY_OF_MONTH_SOLAR;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping(path = {LunarCalendarController.REQUEST_MAPPING_PATH})
+@RequestMapping(path = {'/' + V2Controller.REQUEST_MAPPING_PATH})
 @RequiredArgsConstructor
 @Slf4j
-public class LunarCalendarController {
+public class V2Controller {
 
-    public static final String REQUEST_MAPPING_PATH = "/v2";
+    public static final String REQUEST_MAPPING_PATH = "v2";
 
     // -----------------------------------------------------------------------------------------------------------------
     public static final String PATH_NAME_YEAR = "year";
@@ -62,38 +61,38 @@ public class LunarCalendarController {
 
     public static final String PATH_VALUE_SOLAR = "solar";
 
-    private static Response.Body.Item links(final Response.Body.Item item) {
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_LUNAR)
-                         .slash(item.getLunarYear().getValue())
-                         .withRel(Response.Body.Item.REL_YEAR_LUNAR));
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_LUNAR)
-                         .slash(item.getLunarYear().getValue())
-                         .slash(item.getLunarMonth().getValue())
-                         .withRel(Response.Body.Item.REL_MONTH_LUNAR));
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_LUNAR)
-                         .slash(item.getLunarYear().getValue())
-                         .slash(item.getLunarMonth().getValue())
-                         .slash(item.getLunarDayOfMonth())
-                         .withRel(Response.Body.Item.REL_DATE_LUNAR));
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_SOLAR)
-                         .slash(item.getSolarYear().getValue())
-                         .withRel(Response.Body.Item.REL_YEAR_SOLAR));
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_SOLAR)
-                         .slash(item.getSolarYear().getValue())
-                         .slash(item.getSolarMonth().getValue())
-                         .withRel(Response.Body.Item.REL_MONTH_SOLAR));
-        item.add(linkTo(LunarCalendarController.class)
-                         .slash(PATH_VALUE_SOLAR)
-                         .slash(item.getSolarYear().getValue())
-                         .slash(item.getSolarMonth().getValue())
-                         .slash(item.getSolarDayOfMonth())
-                         .withRel(Response.Body.Item.REL_DATE_SOLAR));
-        return item;
+    private static ItemModel links(final ItemModel model) {
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_LUNAR)
+                          .slash(model.getLunarYear().getValue())
+                          .withRel(ItemModel.REL_YEAR_LUNAR));
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_LUNAR)
+                          .slash(model.getLunarYear().getValue())
+                          .slash(model.getLunarMonth().getValue())
+                          .withRel(ItemModel.REL_MONTH_LUNAR));
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_LUNAR)
+                          .slash(model.getLunarYear().getValue())
+                          .slash(model.getLunarMonth().getValue())
+                          .slash(model.getLunarDayOfMonth())
+                          .withRel(ItemModel.REL_DATE_LUNAR));
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_SOLAR)
+                          .slash(model.getSolarYear().getValue())
+                          .withRel(ItemModel.REL_YEAR_SOLAR));
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_SOLAR)
+                          .slash(model.getSolarYear().getValue())
+                          .slash(model.getSolarMonth().getValue())
+                          .withRel(ItemModel.REL_MONTH_SOLAR));
+        model.add(linkTo(V2Controller.class)
+                          .slash(PATH_VALUE_SOLAR)
+                          .slash(model.getSolarYear().getValue())
+                          .slash(model.getSolarMonth().getValue())
+                          .slash(model.getSolarDayOfMonth())
+                          .withRel(ItemModel.REL_DATE_SOLAR));
+        return model;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -131,11 +130,12 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readLunarYear(@PathVariable(PATH_NAME_YEAR) final int isoYear) {
+    public Flux<ItemModel> readLunarYear(@PathVariable(PATH_NAME_YEAR) final int isoYear) {
         final Year year = yearOf(isoYear);
         return Flux.fromIterable(lunarCalendarService.getItemsForLunarYear(year))
+                .map(ItemModel::new)
 //                .sort(Response.Body.Item.COMPARING_IN_LUNAR)
-                .map(LunarCalendarController::links)
+                .map(V2Controller::links)
                 ;
     }
 
@@ -150,12 +150,13 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readLunarYearMonth(@PathVariable(PATH_NAME_YEAR) final int year,
-                                                       @PathVariable(name = PATH_NAME_MONTH) final int month) {
+    public Flux<ItemModel> readLunarYearMonth(@PathVariable(PATH_NAME_YEAR) final int year,
+                                              @PathVariable(name = PATH_NAME_MONTH) final int month) {
         final YearMonth yearMonth = YearMonth.of(yearOf(year).getValue(), monthOf(month));
         return Flux.fromIterable(lunarCalendarService.getItemsForLunarYearMonth(yearMonth))
+                .map(ItemModel::new)
 //                .sort(Response.Body.Item.COMPARING_IN_LUNAR)
-                .map(LunarCalendarController::links)
+                .map(V2Controller::links)
                 ;
     }
 
@@ -171,13 +172,14 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readLunarYearMonthDay(
+    public Flux<ItemModel> readLunarYearMonthDay(
             @PathVariable(PATH_NAME_YEAR) final int year,
             @PathVariable(name = PATH_NAME_MONTH) final int month,
             @Min(MAX_DAY_OF_MONTH_LUNAR) @Min(MIN_DAY_OF_MONTH_LUNAR) @PathVariable(name = PATH_NAME_DAY_OF_MONTH)
             final int dayOfMonth) {
         return Flux.fromIterable(lunarCalendarService.getItemsForLunarDate(yearOf(year), monthOf(month), dayOfMonth))
-                .map(LunarCalendarController::links)
+                .map(ItemModel::new)
+                .map(V2Controller::links)
                 ;
     }
 
@@ -192,11 +194,12 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readSolarYear(@PathVariable(PATH_NAME_YEAR) final int isoYear) {
+    public Flux<ItemModel> readSolarYear(@PathVariable(PATH_NAME_YEAR) final int isoYear) {
         final Year year = yearOf(isoYear);
         return Flux.fromIterable(lunarCalendarService.getItemsForSolarYear(year))
 //                .sort(Response.Body.Item.COMPARING_IN_SOLAR)
-                .map(LunarCalendarController::links)
+                .map(ItemModel::new)
+                .map(V2Controller::links)
                 ;
     }
 
@@ -211,12 +214,13 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readSolarYearMonth(@PathVariable(PATH_NAME_YEAR) final int year,
-                                                       @PathVariable(name = PATH_NAME_MONTH) final int month) {
+    public Flux<ItemModel> readSolarYearMonth(@PathVariable(PATH_NAME_YEAR) final int year,
+                                              @PathVariable(name = PATH_NAME_MONTH) final int month) {
         final YearMonth yearMonth = YearMonth.of(yearOf(year).getValue(), monthOf(month));
         return Flux.fromIterable(lunarCalendarService.getItemsForSolarYearMonth(yearMonth))
+                .map(ItemModel::new)
 //                .sort(Response.Body.Item.COMPARING_IN_SOLAR)
-                .map(LunarCalendarController::links)
+                .map(V2Controller::links)
                 ;
     }
 
@@ -232,7 +236,7 @@ public class LunarCalendarController {
                     MediaType.APPLICATION_NDJSON_VALUE
             }
     )
-    public Flux<Response.Body.Item> readSolarYearMonthDayOfMonth(
+    public Flux<ItemModel> readSolarYearMonthDayOfMonth(
             @PathVariable(PATH_NAME_YEAR) final int year,
             @PathVariable(name = PATH_NAME_MONTH) final int month,
             @Min(MAX_DAY_OF_MONTH_SOLAR) @Min(MIN_DAY_OF_MONTH_SOLAR) @PathVariable(name = PATH_NAME_DAY_OF_MONTH)
@@ -247,7 +251,8 @@ public class LunarCalendarController {
                                               + month + "); message: " + dte.getMessage());
         }
         return Flux.fromIterable(lunarCalendarService.getItemsForSolarDate(localDate))
-                .map(LunarCalendarController::links)
+                .map(ItemModel::new)
+                .map(V2Controller::links)
                 ;
     }
 

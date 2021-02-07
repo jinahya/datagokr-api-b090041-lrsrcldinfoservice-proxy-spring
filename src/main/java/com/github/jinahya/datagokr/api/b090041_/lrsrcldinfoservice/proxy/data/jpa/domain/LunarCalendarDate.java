@@ -1,6 +1,5 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
 
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Year;
 import java.time.YearMonth;
-import java.util.Objects;
 
 @Entity
 @Table(name = LunarCalendarDate.TABLE_NAME,
@@ -102,37 +99,8 @@ public class LunarCalendarDate {
     public static final String ATTRIBUTE_NAME_MONTH_SOLAR = "monthSolar";
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static LunarCalendarDate from(final Response.Body.Item item) {
-        Objects.requireNonNull(item, "item is null");
-        final LunarCalendarDate instance = new LunarCalendarDate();
-        instance.setSolarDate(item.getSolarDate());
-        instance.setLunarYear(item.getLunarYear().getValue());
-        instance.setLunarMonth(item.getLunarMonth());
-        instance.setLunarDay(item.getLunarDayOfMonth());
-        instance.setLunarLeapMonth(item.getLunarLeapMonth());
-        instance.setLunarGanzhiYear(item.getLunSecha());
-        instance.setLunarGanzhiMonth(item.getLunWolgeon());
-        instance.setLunarGanzhiDay(item.getLunIljin());
-        return instance;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     public LunarCalendarDate() {
         super();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    public Response.Body.Item toItem() {
-        final Response.Body.Item instance = new Response.Body.Item();
-        instance.setSolarDate(solarDate);
-        instance.setLunarYear(Year.of(lunarYear));
-        instance.setLunarMonth(lunarMonth);
-        instance.setLunarDayOfMonth(lunarDay);
-        instance.setLunarLeapMonth(isLunarLeapMonth());
-        instance.setLunSecha(getLunarGanzhiYear());
-        instance.setLunWolgeon(getLunarGanzhiMonth());
-        instance.setLunIljin(getLunarGanzhiDay());
-        return instance;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

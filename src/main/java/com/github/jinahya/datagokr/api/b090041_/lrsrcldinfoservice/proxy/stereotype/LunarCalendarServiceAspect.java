@@ -1,7 +1,7 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype;
 
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
-import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDateMapper;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.repository.LunarCalendarDateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Aspect
 @Component
@@ -27,76 +28,27 @@ import java.util.stream.Collectors;
 public class LunarCalendarServiceAspect {
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Around("execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForSolarDate(..))"
-            + " && args(solarDate)")
-    public Object aroundGetItemsForSolarDate(final ProceedingJoinPoint joinPoint, final LocalDate solarDate)
-            throws Throwable {
-        return lunarCalendarDateRepository.findById(solarDate)
-                .map(LunarCalendarDate::toItem)
-                .map(v -> {
-                    final List<Response.Body.Item> dates = new ArrayList<>();
-                    dates.add(v);
-                    return dates;
-                })
-                .orElseGet(() -> {
-                    final List<Response.Body.Item> items;
-                    try {
-                        items = (List<Response.Body.Item>) joinPoint.proceed();
-                    } catch (final Throwable t) {
-                        throw new RuntimeException(t);
-                    }
-                    final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                        items.stream().map(LunarCalendarDate::from).forEach(lunarCalendarDateRepository::save);
-                    });
-                    return items;
-                });
-    }
-
-    @Around("execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForSolarYearMonth(..))"
-            + " && args(solarYearMonth)")
     @SuppressWarnings({"unchecked"})
-    public Object aroundGetItemsForSolarYearMonth(final ProceedingJoinPoint joinPoint, final YearMonth solarYearMonth)
-            throws Throwable {
-        return Optional.of(lunarCalendarDateRepository.findAllByMonthSolarOrderBySolarDateAsc(solarYearMonth))
-                .filter(l -> !l.isEmpty())
-                .map(l -> l.stream().map(LunarCalendarDate::toItem).collect(Collectors.toList()))
-                .orElseGet(() -> {
-                    final List<Response.Body.Item> items;
-                    try {
-                        items = (List<Response.Body.Item>) joinPoint.proceed();
-                    } catch (final Throwable t) {
-                        throw new RuntimeException(t);
-                    }
-                    final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                        items.stream().map(LunarCalendarDate::from)
-                                .peek(d -> d.setMonthSolar(solarYearMonth))
-                                .forEach(lunarCalendarDateRepository::save);
-                    });
-                    return items;
-                });
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    @SuppressWarnings({"unchecked"})
-    @Around("execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForLunarDate(..))"
-            + " && args(lunarYear,lunarMonth,lunarDayOfMonth)")
+    @Around(value = "execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForLunarDate(..))"
+                    + " && args(lunarYear,lunarMonth,lunarDayOfMonth)",
+            argNames = "joinPoint,lunarYear,lunarMonth,lunarDayOfMonth")
     public Object aroundGetByLunarDate(final ProceedingJoinPoint joinPoint, final Year lunarYear,
                                        final Month lunarMonth, final int lunarDayOfMonth)
             throws Throwable {
         return Optional.of(lunarCalendarDateRepository.findAllByLunarYearAndLunarMonthAndLunarDay(
                 lunarYear.getValue(), lunarMonth, lunarDayOfMonth))
                 .filter(l -> !l.isEmpty())
-                .map(l -> l.stream().map(LunarCalendarDate::toItem).collect(Collectors.toList()))
+                .map(l -> l.stream().map(lunarCalendarDateMapper::toItem).collect(toList()))
                 .orElseGet(() -> {
-                    final List<Response.Body.Item> items;
+                    final List<Item> items;
                     try {
-                        items = (List<Response.Body.Item>) joinPoint.proceed();
+                        items = (List<Item>) joinPoint.proceed();
                     } catch (final Throwable t) {
                         throw new RuntimeException(t);
                     }
                     final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                         items.stream()
-                                .map(LunarCalendarDate::from)
+                                .map(lunarCalendarDateMapper::fromItem)
                                 .forEach(lunarCalendarDateRepository::save);
                     });
                     return items;
@@ -110,17 +62,17 @@ public class LunarCalendarServiceAspect {
             throws Throwable {
         return Optional.of(lunarCalendarDateRepository.findAllByLunarYearAndLunarMonth(lunarYearMonth))
                 .filter(l -> !l.isEmpty())
-                .map(l -> l.stream().map(LunarCalendarDate::toItem).collect(Collectors.toList()))
+                .map(l -> l.stream().map(lunarCalendarDateMapper::toItem).collect(toList()))
                 .orElseGet(() -> {
-                    final List<Response.Body.Item> items;
+                    final List<Item> items;
                     try {
-                        items = (List<Response.Body.Item>) joinPoint.proceed();
+                        items = (List<Item>) joinPoint.proceed();
                     } catch (final Throwable t) {
                         throw new RuntimeException(t);
                     }
                     final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                         items.stream()
-                                .map(LunarCalendarDate::from)
+                                .map(lunarCalendarDateMapper::fromItem)
                                 .peek(d -> d.setMonthLunar(lunarYearMonth))
                                 .forEach(lunarCalendarDateRepository::save);
                     });
@@ -128,5 +80,59 @@ public class LunarCalendarServiceAspect {
                 });
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    @Around("execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForSolarDate(..))"
+            + " && args(solarDate)")
+    public Object aroundGetItemsForSolarDate(final ProceedingJoinPoint joinPoint, final LocalDate solarDate)
+            throws Throwable {
+        return lunarCalendarDateRepository.findById(solarDate)
+                .map(lunarCalendarDateMapper::toItem)
+                .map(v -> {
+                    final List<Item> dates = new ArrayList<>();
+                    dates.add(v);
+                    return dates;
+                })
+                .orElseGet(() -> {
+                    final List<Item> items;
+                    try {
+                        items = (List<Item>) joinPoint.proceed();
+                    } catch (final Throwable t) {
+                        throw new RuntimeException(t);
+                    }
+                    final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                        items.stream()
+                                .map(lunarCalendarDateMapper::fromItem)
+                                .forEach(lunarCalendarDateRepository::save);
+                    });
+                    return items;
+                });
+    }
+
+    @Around("execution(* com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype.LunarCalendarService.getItemsForSolarYearMonth(..))"
+            + " && args(solarYearMonth)")
+    @SuppressWarnings({"unchecked"})
+    public Object aroundGetItemsForSolarYearMonth(final ProceedingJoinPoint joinPoint, final YearMonth solarYearMonth)
+            throws Throwable {
+        return Optional.of(lunarCalendarDateRepository.findAllByMonthSolarOrderBySolarDateAsc(solarYearMonth))
+                .filter(l -> !l.isEmpty())
+                .map(l -> l.stream().map(lunarCalendarDateMapper::toItem).collect(toList()))
+                .orElseGet(() -> {
+                    final List<Item> items;
+                    try {
+                        items = (List<Item>) joinPoint.proceed();
+                    } catch (final Throwable t) {
+                        throw new RuntimeException(t);
+                    }
+                    final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                        items.stream().map(lunarCalendarDateMapper::fromItem)
+                                .peek(d -> d.setMonthSolar(solarYearMonth))
+                                .forEach(lunarCalendarDateRepository::save);
+                    });
+                    return items;
+                });
+    }
+
     private final LunarCalendarDateRepository lunarCalendarDateRepository;
+
+    private final LunarCalendarDateMapper lunarCalendarDateMapper;
 }
