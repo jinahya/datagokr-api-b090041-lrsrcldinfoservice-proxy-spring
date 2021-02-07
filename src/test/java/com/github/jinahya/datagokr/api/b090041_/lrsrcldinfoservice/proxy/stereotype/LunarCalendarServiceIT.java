@@ -1,6 +1,7 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.stereotype;
 
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.LrsrCldInfoServiceClient;
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Response;
 import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.Application;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +74,7 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForLunarDate() {
         final LocalDate now = LocalDate.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarDate(
+        final List<Item> items = lunarCalendarService.getItemsForLunarDate(
                 Year.from(now), Month.from(now), now.getDayOfMonth());
         assertThat(items).isNotNull();
     }
@@ -81,12 +82,12 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForLunarYearMonth() {
         final YearMonth lunarYearMonth = YearMonth.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarYearMonth(lunarYearMonth);
+        final List<Item> items = lunarCalendarService.getItemsForLunarYearMonth(lunarYearMonth);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_LUNAR)
+                .isSortedAccordingTo(Item.COMPARING_IN_LUNAR)
                 .allSatisfy(i -> {
                     assertThat(i.getLunarYear().getValue()).isEqualTo(lunarYearMonth.getYear());
                     assertThat(i.getLunarMonth()).isNotNull().isEqualTo(lunarYearMonth.getMonth());
@@ -108,7 +109,7 @@ class LunarCalendarServiceIT {
                 } catch (final InterruptedException ie) {
                     ie.printStackTrace();
                 }
-                final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarYearMonth(lunarYearMonth);
+                final List<Item> items = lunarCalendarService.getItemsForLunarYearMonth(lunarYearMonth);
             });
         }
         executorService.shutdown();
@@ -118,12 +119,12 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForLunarYear_() {
         final Year lunarYear = Year.now().minus(1L, ChronoUnit.YEARS);
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForLunarYear(lunarYear);
+        final List<Item> items = lunarCalendarService.getItemsForLunarYear(lunarYear);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_LUNAR)
+                .isSortedAccordingTo(Item.COMPARING_IN_LUNAR)
                 .allSatisfy(i -> {
                     assertThat(i.getLunarYear()).isEqualTo(lunarYear);
                 })
@@ -134,12 +135,12 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForSolarDate_() {
         final LocalDate solarDate = LocalDate.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarDate(solarDate);
+        final List<Item> items = lunarCalendarService.getItemsForSolarDate(solarDate);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
                 .allSatisfy(i -> {
                     assertThat(i).isNotNull();
                 })
@@ -149,12 +150,12 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForSolarYearMonth_() {
         final YearMonth solarYearMonth = YearMonth.now();
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYearMonth(solarYearMonth);
+        final List<Item> items = lunarCalendarService.getItemsForSolarYearMonth(solarYearMonth);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
                 .allSatisfy(i -> {
                     assertThat(i.getSolarYear().getValue()).isEqualTo(solarYearMonth.getYear());
                     assertThat(i.getSolarMonth()).isNotNull().isEqualTo(solarYearMonth.getMonth());
@@ -165,12 +166,12 @@ class LunarCalendarServiceIT {
     @Test
     void getItemsForSolarYear_() {
         final Year solarYear = Year.now().minus(1L, ChronoUnit.YEARS);
-        final List<Response.Body.Item> items = lunarCalendarService.getItemsForSolarYear(solarYear);
+        final List<Item> items = lunarCalendarService.getItemsForSolarYear(solarYear);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Response.Body.Item.COMPARING_IN_SOLAR)
+                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
                 .allSatisfy(i -> {
                     assertThat(i.getSolarYear()).isEqualTo(solarYear);
                 })

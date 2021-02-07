@@ -6,8 +6,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.time.Year;
+
+import static java.util.Optional.ofNullable;
+
 @Mapper(componentModel = "spring")
 public interface LunarCalendarDateMapper {
+
+    default Year map(final Integer year) {
+        return ofNullable(year).map(Year::of).orElse(null);
+    }
 
     /**
      * Maps from specified item to specified lunar calendar date.
@@ -16,8 +24,7 @@ public interface LunarCalendarDateMapper {
      * @param target the target lunar calendar date.
      * @return given {@code target}.
      */
-    //@Mapping(source = "java(source.getLunarYear().getValue()", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_YEAR)
-    @Mapping(source = "lunarYearValue", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_YEAR)
+    @Mapping(source = "lunarYearValue", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_YEAR)
     @Mapping(source = "lunarMonth", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_MONTH)
     @Mapping(source = "lunarDayOfMonth", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_DAY)
     @Mapping(source = "lunarLeapMonth", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_LEAP_MONTH)
@@ -27,7 +34,7 @@ public interface LunarCalendarDateMapper {
     @Mapping(source = "solarDate", target = LunarCalendarDate.ATTRIBUTE_NAE_SOLAR_DATE)
     LunarCalendarDate fromItem(Item source, @MappingTarget LunarCalendarDate target);
 
-    default LunarCalendarDate fromItem(Item source) {
+    default LunarCalendarDate fromItem(final Item source) {
         return fromItem(source, new LunarCalendarDate());
     }
 

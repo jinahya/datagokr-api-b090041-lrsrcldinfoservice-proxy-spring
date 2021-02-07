@@ -5,7 +5,6 @@ import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.messag
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.time.Month;
 import java.time.Year;
 
@@ -36,30 +36,33 @@ public class V1Controller {
 
     public static final String REQUEST_MAPPING_PATH = "v1";
 
-    @Operation(tags = {TAG_LUNAR}, summary = "Reads from /getSolCalInfo")
-    @Cacheable(cacheNames = {"getLunCalInfo"})
+    @Operation(tags = {TAG_LUNAR}, summary = "Reads responses from /getSolCalInfo")
     @GetMapping(path = {"/getLunCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getLunCalInfo(
             @RequestParam(QUERY_PARAM_NAME_SOL_YEAR) final int solYear,
             @RequestParam(QUERY_PARAM_NAME_SOL_MONTH) final int solMonth,
             @RequestParam(value = QUERY_PARAM_NAME_SOL_DAY, required = false) final Integer solDay) {
-        return client.getLunCalInfoForAllPages(Year.of(solYear), Month.of(solMonth), solDay);
+        return lrsrCldInfoServiceReactiveClient
+                .getLunCalInfoForAllPages(Year.of(solYear), Month.of(solMonth), solDay)
+                .cache(solDay != null ? 1 : 3, Duration.ofHours(1L))
+                ;
     }
 
-    @Operation(tags = {TAG_SOLAR}, summary = "Reads from /getSolCalInfo")
-    @Cacheable(cacheNames = {"getSolCalInfo"})
+    @Operation(tags = {TAG_SOLAR}, summary = "Reads responses from /getSolCalInfo")
     @GetMapping(path = {"/getSolCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getSolCalInfo(
             @RequestParam(QUERY_PARAM_NAME_LUN_YEAR) final int lunYear,
             @RequestParam(QUERY_PARAM_NAME_LUN_MONTH) final int lunMonth,
             @RequestParam(value = QUERY_PARAM_NAME_LUN_DAY, required = false) final Integer lunDay) {
-        return client.getSolCalInfoForAllPages(Year.of(lunYear), Month.of(lunMonth), lunDay);
+        return lrsrCldInfoServiceReactiveClient
+                .getSolCalInfoForAllPages(Year.of(lunYear), Month.of(lunMonth), lunDay)
+                .cache(lunDay != null ? 1 : 4, Duration.ofHours(1L))
+                ;
     }
 
-    @Operation(tags = {TAG_LUNAR}, summary = "Reads from /getSpcifyLunCalInfo")
-    @Cacheable(cacheNames = {"getSpcifyLunCalInfo"})
+    @Operation(tags = {TAG_LUNAR}, summary = "Reads responses from /getSpcifyLunCalInfo")
     @GetMapping(path = {"/getSpcifyLunCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getSpcifyLunCalInfo(
@@ -68,9 +71,11 @@ public class V1Controller {
             @RequestParam(QUERY_PARAM_NAME_LUN_MONTH) final int lunMonth,
             @RequestParam(QUERY_PARAM_NAME_LUN_DAY) final int lunDay,
             @RequestParam(QUERY_PARAM_NAME_LEAP_MONTH) final boolean leapMonth) {
-        return client.getSpcifyLunCalInfoForAllPages(
-                Year.of(fromSolYear), Year.of(toSolYear), Month.of(lunMonth), lunDay, leapMonth);
+        return lrsrCldInfoServiceReactiveClient.getSpcifyLunCalInfoForAllPages(
+                Year.of(fromSolYear), Year.of(toSolYear), Month.of(lunMonth), lunDay, leapMonth)
+                .cache((toSolYear - fromSolYear) / 5, Duration.ofHours(1L))
+                ;
     }
 
-    private final LrsrCldInfoServiceReactiveClient client;
+    private final LrsrCldInfoServiceReactiveClient lrsrCldInfoServiceReactiveClient;
 }

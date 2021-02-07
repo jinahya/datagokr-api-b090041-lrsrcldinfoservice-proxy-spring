@@ -43,6 +43,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 //    implementation "org.springdoc:springdoc-openapi-common:$springdocVersion"
 //    implementation "org.springdoc:springdoc-openapi-hateoas:$springdocVersion"
     implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"

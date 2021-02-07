@@ -34,7 +34,7 @@ public final class ResponseResources {
         return RESPONSES;
     }
 
-    public static Stream<Response.Body.Item> items() {
+    public static Stream<Item> items() {
         return responses().stream().flatMap(r -> r.getBody().getItems().stream());
     }
 

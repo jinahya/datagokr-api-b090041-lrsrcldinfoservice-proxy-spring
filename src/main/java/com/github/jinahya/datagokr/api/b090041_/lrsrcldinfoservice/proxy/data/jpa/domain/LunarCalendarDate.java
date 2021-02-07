@@ -1,5 +1,6 @@
 package com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain;
 
+import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,7 +54,7 @@ public class LunarCalendarDate {
     // ------------------------------------------------------------------------------------------ lunar_year / lunarYear
     public static final String COLUMN_NAME_LUNAR_YEAR = "lunar_year";
 
-    public static final String ATTRIBUTE_NAE_LUNAR_YEAR = "lunarYear";
+    public static final String ATTRIBUTE_NAME_LUNAR_YEAR = "lunarYear";
 
     // ---------------------------------------------------------------------------------------- lunar_month / lunarMonth
     public static final String COLUMN_NAME_LUNAR_MONTH = "lunar_month";
@@ -129,7 +130,6 @@ public class LunarCalendarDate {
     private LocalDate solarDate;
 
     // -----------------------------------------------------------------------------------------------------------------
-    @NotNull
     @Basic(optional = false)
     @Column(name = COLUMN_NAME_LUNAR_YEAR, nullable = false, insertable = true, updatable = false)
     private int lunarYear;
@@ -140,8 +140,8 @@ public class LunarCalendarDate {
     @Column(name = COLUMN_NAME_LUNAR_MONTH, nullable = false, insertable = true, updatable = false)
     private Month lunarMonth;
 
-    @Max(31)
-    @Min(1)
+    @Max(Item.MAX_DAY_OF_MONTH_LUNAR)
+    @Min(Item.MIN_DAY_OF_MONTH_LUNAR)
     @Basic(optional = false)
     @Column(name = COLUMN_NAME_LUNAR_DAY, nullable = false, insertable = true, updatable = false)
     private int lunarDay;
