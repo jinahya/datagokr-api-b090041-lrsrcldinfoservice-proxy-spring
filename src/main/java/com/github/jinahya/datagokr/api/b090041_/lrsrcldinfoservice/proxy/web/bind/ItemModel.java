@@ -147,7 +147,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     // ----------------------------------------------------------------------------------------------------------- lunar
-//    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @NotNull
@@ -155,7 +154,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return Year.parse(item.getLunYear());
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @NotNull
@@ -163,7 +161,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return Month.of(parseInt(item.getLunMonth()));
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Max(MAX_DAY_OF_MONTH_LUNAR)
@@ -172,14 +169,12 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return parseInt(item.getLunDay());
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     public boolean getLunarLeapMonth() {
         return LEAP.equals(item.getLunLeapmonth());
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -188,7 +183,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return item.getLunSecha().substring(0, 2);
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -197,7 +191,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return item.getLunSecha().substring(3, 5);
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -206,7 +199,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return ofNullable(item.getLunWolgeon()).map(s -> s.substring(0, 2)).orElse(null);
     }
 
-    //    @JsonbProperty(nillable = true)
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -215,7 +207,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return ofNullable(item.getLunWolgeon()).map(s -> s.substring(3, 5)).orElse(null);
     }
 
-    //    @JsonbProperty(nillable = true)
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -224,7 +215,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return item.getLunIljin().substring(0, 2);
     }
 
-    //    @JsonbProperty
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @Size(min = 2, max = 2)
@@ -234,7 +224,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     // ----------------------------------------------------------------------------------------------------------- solar
-//    @JsonbTransient
     @JsonIgnore
     @XmlTransient
     @NotNull
@@ -242,7 +231,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return Year.parse(item.getSolYear(), YEAR_FORMATTER);
     }
 
-    //    @JsonbTransient
     @JsonIgnore
     @XmlTransient
     @NotNull
@@ -250,7 +238,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return Month.of(parseInt(item.getSolMonth()));
     }
 
-    //    @JsonbTransient
     @JsonIgnore
     @XmlTransient
     @Max(MAX_DAY_OF_MONTH_SOLAR)
@@ -259,7 +246,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
         return parseInt(item.getSolDay());
     }
 
-    //    @JsonbProperty
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
     @XmlElement(required = true)
     @NotNull
@@ -268,7 +254,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @JsonbIgnore
     @JsonIgnore
     @XmlTransient
     @Valid

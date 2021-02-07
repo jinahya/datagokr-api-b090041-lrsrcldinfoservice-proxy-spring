@@ -5,6 +5,7 @@ import com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.messag
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class V1Controller {
     public static final String REQUEST_MAPPING_PATH = "v1";
 
     @Operation(tags = {TAG_LUNAR}, summary = "Reads from /getSolCalInfo")
+    @Cacheable(cacheNames = {"getLunCalInfo"})
     @GetMapping(path = {"/getLunCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getLunCalInfo(
@@ -46,6 +48,7 @@ public class V1Controller {
     }
 
     @Operation(tags = {TAG_SOLAR}, summary = "Reads from /getSolCalInfo")
+    @Cacheable(cacheNames = {"getSolCalInfo"})
     @GetMapping(path = {"/getSolCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getSolCalInfo(
@@ -56,6 +59,7 @@ public class V1Controller {
     }
 
     @Operation(tags = {TAG_LUNAR}, summary = "Reads from /getSpcifyLunCalInfo")
+    @Cacheable(cacheNames = {"getSpcifyLunCalInfo"})
     @GetMapping(path = {"/getSpcifyLunCalInfo"},
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     public Flux<Response> getSpcifyLunCalInfo(
@@ -68,6 +72,5 @@ public class V1Controller {
                 Year.of(fromSolYear), Year.of(toSolYear), Month.of(lunMonth), lunDay, leapMonth);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     private final LrsrCldInfoServiceReactiveClient client;
 }

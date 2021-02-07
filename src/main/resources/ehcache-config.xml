@@ -6,6 +6,37 @@
   </service>
 
   <!-- ============================================================================================================= -->
+  <cache alias="getLunCalInfo">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">8</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="getSolCalInfo">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">8</offheap>
+    </resources>
+  </cache>
+
+  <cache alias="getSpcifyLunCalInfo">
+    <expiry>
+      <ttl unit="days">30</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1024</heap>
+      <offheap unit="MB">8</offheap>
+    </resources>
+  </cache>
+
+  <!-- ============================================================================================================= -->
 
   <cache alias="itemsForSolarDate">
     <expiry>
