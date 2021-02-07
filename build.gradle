@@ -28,7 +28,7 @@ ext {
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.4.1-SNAPSHOT'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.4.2'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
 //    implementation "io.springfox:springfox-bean-validators:3.0.0"
