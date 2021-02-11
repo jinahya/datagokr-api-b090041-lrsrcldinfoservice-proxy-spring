@@ -56,13 +56,28 @@ datagokr:
 
 All endpoints `Accept`s `application/json` and `application/x-ndjson`.
 
-|Method|URI|Notes|
-|------|----|-----|
-|`GET`|`/v2/lunar/{year}`|Reads all items in specified `{year}` in lunar calendar|
-|`GET`|`/v2/lunar/{year}/{month}`|Reads all items in specified `{month}` in lunar calendar|
-|`GET`|`/v2/lunar/{year}/{month}/{day}`|Reads items of specified date in lunar calendar|
+### /v1
+
+All endpoints defined under the `/v1` path invoke corresponding remote endpoints with specified parameters and returns
+aggregated responses from all pages.
+
+|method|uri |description|notes|
+|------|----|-----------|-----|
+|`GET`|`/v1/getLunCalInfo`|Reads all responses from all pages.||
+|`GET`|`/v1/getSolCalInfo`|Reads all responses from all pages.||
+|`GET`|`/v1/getSpcifyLunCalInfo`|Reads all responses from all pages.||
+
+### /v2
+
+All endpoints defined under the `/v2` path may return cached results.
+
+|method|uri|description|notes|
+|------|----|----------|-----|
+|`GET`|`/v2/lunar/{year}`|Reads all items in specified `{year}` in lunar calendar||
+|`GET`|`/v2/lunar/{year}/{month}`|Reads all items in specified `{month}` in lunar calendar||
+|`GET`|`/v2/lunar/{year}/{month}/{day}`|Reads items of specified date in lunar calendar||
 |`GET`|`/v2/solar/{year}`|Reads all items in specified `{year}` in solar calendar|
-|`GET`|`/v2/solar/{year}/{month}`|Reads all items in specified `{month}` in solar calendar|
-|`GET`|`/v2/solar/{year}/{month}/{day}`|Reads items of specified date in solar calendar|
+|`GET`|`/v2/solar/{year}/{month}`|Reads all items in specified `{month}` in solar calendar||
+|`GET`|`/v2/solar/{year}/{month}/{day}`|Reads items of specified date in solar calendar||
 
 

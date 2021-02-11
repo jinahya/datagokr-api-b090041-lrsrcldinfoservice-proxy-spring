@@ -17,6 +17,10 @@ public interface LunarCalendarDateMapper {
         return ofNullable(year).map(Year::of).orElse(null);
     }
 
+    default Integer map(final Year year) {
+        return ofNullable(year).map(Year::getValue).orElse(null);
+    }
+
     /**
      * Maps from specified item to specified lunar calendar date.
      *
@@ -24,10 +28,10 @@ public interface LunarCalendarDateMapper {
      * @param target the target lunar calendar date.
      * @return given {@code target}.
      */
-    @Mapping(source = "lunarYearValue", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_YEAR)
-    @Mapping(source = "lunarMonth", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_MONTH)
-    @Mapping(source = "lunarDayOfMonth", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_DAY)
-    @Mapping(source = "lunarLeapMonth", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_LEAP_MONTH)
+    @Mapping(source = "lunYear", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_YEAR)
+    @Mapping(source = "lunMonth", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_MONTH)
+    @Mapping(source = "lunDay", target = LunarCalendarDate.ATTRIBUTE_NAE_LUNAR_DAY)
+    @Mapping(source = "lunLeapmonth", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_LEAP_MONTH)
     @Mapping(source = "lunSecha", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_GANZHI_YEAR)
     @Mapping(source = "lunWolgeon", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_GANZHI_MONTH)
     @Mapping(source = "lunIljin", target = LunarCalendarDate.ATTRIBUTE_NAME_LUNAR_GANZHI_DAY)

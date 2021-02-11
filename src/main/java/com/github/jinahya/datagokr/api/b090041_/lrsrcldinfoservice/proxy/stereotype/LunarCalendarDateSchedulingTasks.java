@@ -36,7 +36,7 @@ public class LunarCalendarDateSchedulingTasks {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void purgePastEntriesByMonthSolar() {
-        final int count = lunarCalendarDateRepository.deleteAllByMonthSolarIsLessThanLimitNative(
+        final int count = lunarCalendarDateRepository.deleteAllBySolarMonthAggregatedIsLessThanLimitNative(
                 YearMonth.now().minus(PERIOD_FOR_PURGING_PAST_ENTRIES_BY_SOLAR_MONTH));
         log.info("number of deleted past entries by month_solar: {}", count);
     }
@@ -51,7 +51,7 @@ public class LunarCalendarDateSchedulingTasks {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void purgeFutureEntriesByMonthSolar() {
-        final int count = lunarCalendarDateRepository.deleteAllByMonthSolarIsLessThanLimitNative(
+        final int count = lunarCalendarDateRepository.deleteAllBySolarMonthAggregatedIsLessThanLimitNative(
                 YearMonth.now().plus(PERIOD_FOR_PURGING_FUTURE_ENTRIES_BY_SOLAR_MONTH));
         log.info("number of deleted future entries by month_solar: {}", count);
     }

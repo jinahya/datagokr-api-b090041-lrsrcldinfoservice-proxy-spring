@@ -22,14 +22,14 @@ class LunarCalendarDateRepositoryAspectTest {
     @ParameterizedTest
     void save_(final Item item) {
         final LunarCalendarDate saved1 = lunarCalendarDateRepository.save(lunarCalendarDateMapper.fromItem(item));
-        final YearMonth monthLunar = current().nextBoolean() ? null : YearMonth.now();
-        saved1.setMonthLunar(monthLunar);
-        final YearMonth monthSolar = current().nextBoolean() ? null : YearMonth.now();
-        saved1.setMonthSolar(monthSolar);
+        final YearMonth lunarMonthAggregated = current().nextBoolean() ? null : YearMonth.now();
+        saved1.setLunarMonthAggregated(lunarMonthAggregated);
+        final YearMonth solarMonthAggregated = current().nextBoolean() ? null : YearMonth.now();
+        saved1.setSolarMonthAggregated(solarMonthAggregated);
         final LunarCalendarDate saved2 = lunarCalendarDateRepository.save(saved1);
         final LunarCalendarDate saved3 = lunarCalendarDateRepository.save(lunarCalendarDateMapper.fromItem(item));
-        assertThat(saved3.getMonthLunar()).isEqualTo(monthLunar);
-        assertThat(saved3.getMonthSolar()).isEqualTo(monthSolar);
+        assertThat(saved3.getLunarMonthAggregated()).isEqualTo(lunarMonthAggregated);
+        assertThat(saved3.getSolarMonthAggregated()).isEqualTo(solarMonthAggregated);
     }
 
     @Autowired

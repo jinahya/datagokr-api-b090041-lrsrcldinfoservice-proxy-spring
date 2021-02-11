@@ -15,6 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -38,7 +39,7 @@ public class LunarCalendarService {
     // ---------------------------------------------------------------------------------------------- getItemsByLunar...
     @Cacheable(cacheNames = {"itemsForLunarDate"})
     @Transactional
-    public @NotNull List<@Valid @NotNull Item> getItemsForLunarDate(
+    public @Size(min = 1, max = 2) @NotNull List<@Valid @NotNull Item> getItemsForLunarDate(
             @NotNull final Year lunarYear, @NotNull final Month lunarMonth,
             @Max(MAX_DAY_OF_MONTH_LUNAR) @Min(MIN_DAY_OF_MONTH_LUNAR) final int lunarDayOfMonth) {
         return lrsrCldInfoServiceClient.getSolCalInfo(lunarYear, lunarMonth, lunarDayOfMonth);
@@ -49,7 +50,7 @@ public class LunarCalendarService {
     public @NotEmpty List<@Valid @NotNull Item> getItemsForLunarYearMonth(@NotNull final YearMonth lunarYearMonth) {
         return lrsrCldInfoServiceClient.getSolCalInfo(lunarYearMonth)
                 .stream()
-                .sorted(Item.comparingInLunarLeapMonthFirst)
+                .sorted(Item.COMPARING_LUNAR_DATE_LEAP_MONTH_FIRST)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +76,8 @@ public class LunarCalendarService {
 
     // --------------------------------------------------------------------------------------------- getItemsForSolar...
     @Cacheable(cacheNames = {"itemsForSolarDate"})
-    public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarDate(@NotNull final LocalDate solarDate) {
+    public @Size(min = 1, max = 1) @NotNull List<@Valid @NotNull Item> getItemsForSolarDate(
+            @NotNull final LocalDate solarDate) {
         return lrsrCldInfoServiceClient.getLunCalInfo(solarDate);
     }
 
@@ -84,7 +86,7 @@ public class LunarCalendarService {
     public @NotEmpty List<@Valid @NotNull Item> getItemsForSolarYearMonth(@NotNull final YearMonth solarYearMonth) {
         return lrsrCldInfoServiceClient.getLunCalInfo(solarYearMonth)
                 .stream()
-                .sorted(Item.COMPARING_IN_SOLAR)
+                .sorted(Item.COMPARING_SOLAR_DATE)
                 .collect(Collectors.toList());
     }
 

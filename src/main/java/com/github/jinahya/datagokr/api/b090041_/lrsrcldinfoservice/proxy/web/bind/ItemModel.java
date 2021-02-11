@@ -13,10 +13,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -27,10 +23,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MAX_DAY_OF_MONTH_LUNAR;
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MAX_DAY_OF_MONTH_SOLAR;
 import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MIN_DAY_OF_MONTH_LUNAR;
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.message.Item.MIN_DAY_OF_MONTH_SOLAR;
-import static java.lang.Integer.parseInt;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
@@ -39,7 +32,6 @@ import static java.util.Optional.ofNullable;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @Slf4j
 public class ItemModel extends RepresentationModel<ItemModel> implements Serializable {
 
@@ -148,35 +140,30 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
 
     // ----------------------------------------------------------------------------------------------------------- lunar
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @NotNull
-    public Year getLunarYear() {
-        return Year.parse(item.getLunYear());
+    public int getLunarYear() {
+        return item.getLunYear().getValue();
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @NotNull
-    public Month getLunarMonth() {
-        return Month.of(parseInt(item.getLunMonth()));
+    public int getLunarMonth() {
+        return item.getLunMonth().getValue();
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Max(MAX_DAY_OF_MONTH_LUNAR)
     @Min(MIN_DAY_OF_MONTH_LUNAR)
     public int getLunarDayOfMonth() {
-        return parseInt(item.getLunDay());
+        return item.getLunDay();
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     public boolean getLunarLeapMonth() {
-        return LEAP.equals(item.getLunLeapmonth());
+        return item.getLunLeapmonth();
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @NotNull
     public String getLunarGanzhiForYearKore() {
@@ -184,7 +171,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @NotNull
     public String getLunarGanzhiForYearHans() {
@@ -192,7 +178,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @Nullable
     public String getLunarGanzhiForMonthKore() {
@@ -200,7 +185,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @Nullable
     public String getLunarGanzhiForMonthHans() {
@@ -208,7 +192,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @NotNull
     public String getLunarGanzhiForDayOfMonthKore() {
@@ -216,7 +199,6 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @Size(min = 2, max = 2)
     @NotNull
     public String getLunarGanzhiForDayOfMonthHans() {
@@ -224,38 +206,14 @@ public class ItemModel extends RepresentationModel<ItemModel> implements Seriali
     }
 
     // ----------------------------------------------------------------------------------------------------------- solar
-    @JsonIgnore
-    @XmlTransient
-    @NotNull
-    public Year getSolarYear() {
-        return Year.parse(item.getSolYear(), YEAR_FORMATTER);
-    }
-
-    @JsonIgnore
-    @XmlTransient
-    @NotNull
-    public Month getSolarMonth() {
-        return Month.of(parseInt(item.getSolMonth()));
-    }
-
-    @JsonIgnore
-    @XmlTransient
-    @Max(MAX_DAY_OF_MONTH_SOLAR)
-    @Min(MIN_DAY_OF_MONTH_SOLAR)
-    public int getSolarDayOfMonth() {
-        return parseInt(item.getSolDay());
-    }
-
     @JsonProperty(required = true, access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(required = true)
     @NotNull
     public LocalDate getSolarDate() {
-        return LocalDate.of(getSolarYear().getValue(), getSolarMonth(), getSolarDayOfMonth());
+        return item.getSolarDate();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @JsonIgnore
-    @XmlTransient
     @Valid
     @NotNull
     @Getter

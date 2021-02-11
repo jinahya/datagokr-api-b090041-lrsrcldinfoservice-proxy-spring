@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(
         scanBasePackageClasses = {
                 Application.class,
-                com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client._NoOp.class
+                com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.client.NoOp.class
         }
 )
 public class Application {

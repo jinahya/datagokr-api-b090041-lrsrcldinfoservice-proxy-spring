@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Primary;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
@@ -74,7 +73,7 @@ class LunarCalendarServiceIT {
     void getItemsForLunarDate() {
         final LocalDate now = LocalDate.now();
         final List<Item> items = lunarCalendarService.getItemsForLunarDate(
-                Year.from(now), Month.from(now), now.getDayOfMonth());
+                Year.from(now), now.getMonth(), now.getDayOfMonth());
         assertThat(items).isNotNull();
     }
 
@@ -86,10 +85,10 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.comparingInLunarLeapMonthFirst)
+                .isSortedAccordingTo(Item.COMPARING_LUNAR_DATE_LEAP_MONTH_FIRST)
                 .allSatisfy(i -> {
-                    assertThat(i.getLunarYear().getValue()).isEqualTo(lunarYearMonth.getYear());
-                    assertThat(i.getLunarMonth()).isNotNull().isEqualTo(lunarYearMonth.getMonth());
+                    assertThat(i.getLunYear()).isNotNull().isEqualTo(Year.from(lunarYearMonth));
+                    assertThat(i.getLunMonth()).isNotNull().isSameAs(lunarYearMonth.getMonth());
                 })
         ;
     }
@@ -123,25 +122,25 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.comparingInLunarLeapMonthFirst)
+                .isSortedAccordingTo(Item.COMPARING_LUNAR_DATE_LEAP_MONTH_FIRST)
                 .allSatisfy(i -> {
-                    assertThat(i.getLunarYear()).isEqualTo(lunarYear);
+                    assertThat(i.getLunYear()).isEqualTo(lunarYear);
                 })
         ;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    void getItemsForSolarDate_() {
+    void getItemsForSolarDate__() {
         final LocalDate solarDate = LocalDate.now();
         final List<Item> items = lunarCalendarService.getItemsForSolarDate(solarDate);
         assertThat(items)
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
+                .hasSize(1)
                 .allSatisfy(i -> {
-                    assertThat(i).isNotNull();
+                    assertThat(i.getSolarDate()).isNotNull().isEqualTo(solarDate);
                 })
         ;
     }
@@ -154,10 +153,10 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
+                .isSortedAccordingTo(Item.COMPARING_SOLAR_DATE)
                 .allSatisfy(i -> {
-                    assertThat(i.getSolarYear().getValue()).isEqualTo(solarYearMonth.getYear());
-                    assertThat(i.getSolarMonth()).isNotNull().isEqualTo(solarYearMonth.getMonth());
+                    assertThat(i.getSolYear()).isNotNull().isEqualTo(Year.from(solarYearMonth));
+                    assertThat(i.getSolMonth()).isNotNull().isSameAs(solarYearMonth.getMonth());
                 })
         ;
     }
@@ -170,9 +169,9 @@ class LunarCalendarServiceIT {
                 .isNotNull()
                 .isNotEmpty()
                 .doesNotContainNull()
-                .isSortedAccordingTo(Item.COMPARING_IN_SOLAR)
+                .isSortedAccordingTo(Item.COMPARING_SOLAR_DATE)
                 .allSatisfy(i -> {
-                    assertThat(i.getSolarYear()).isEqualTo(solarYear);
+                    assertThat(i.getSolYear()).isNotNull().isEqualTo(solarYear);
                 })
         ;
     }

@@ -71,11 +71,13 @@ public class V1Controller {
             @RequestParam(QUERY_PARAM_NAME_LUN_MONTH) final int lunMonth,
             @RequestParam(QUERY_PARAM_NAME_LUN_DAY) final int lunDay,
             @RequestParam(QUERY_PARAM_NAME_LEAP_MONTH) final boolean leapMonth) {
-        return lrsrCldInfoServiceReactiveClient.getSpcifyLunCalInfoForAllPages(
-                Year.of(fromSolYear), Year.of(toSolYear), Month.of(lunMonth), lunDay, leapMonth)
+        return lrsrCldInfoServiceReactiveClient
+                .getSpcifyLunCalInfoForAllPages(Year.of(fromSolYear), Year.of(toSolYear), Month.of(lunMonth), lunDay,
+                                                leapMonth)
                 .cache((toSolYear - fromSolYear) / 5, Duration.ofHours(1L))
                 ;
     }
 
+    // ------------------------------------------------------------------------------------------------- instance fields
     private final LrsrCldInfoServiceReactiveClient lrsrCldInfoServiceReactiveClient;
 }

@@ -73,7 +73,7 @@ public class LunarCalendarServiceAspect {
                     final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                         items.stream()
                                 .map(lunarCalendarDateMapper::fromItem)
-                                .peek(d -> d.setMonthLunar(lunarYearMonth))
+                                .peek(d -> d.setLunarMonthAggregated(lunarYearMonth))
                                 .forEach(lunarCalendarDateRepository::save);
                     });
                     return items;
@@ -113,7 +113,7 @@ public class LunarCalendarServiceAspect {
     @SuppressWarnings({"unchecked"})
     public Object aroundGetItemsForSolarYearMonth(final ProceedingJoinPoint joinPoint, final YearMonth solarYearMonth)
             throws Throwable {
-        return Optional.of(lunarCalendarDateRepository.findAllByMonthSolarOrderBySolarDateAsc(solarYearMonth))
+        return Optional.of(lunarCalendarDateRepository.findAllBySolarMonthAggregatedOrderBySolarDateAsc(solarYearMonth))
                 .filter(l -> !l.isEmpty())
                 .map(l -> l.stream().map(lunarCalendarDateMapper::toItem).collect(toList()))
                 .orElseGet(() -> {
@@ -125,13 +125,14 @@ public class LunarCalendarServiceAspect {
                     }
                     final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                         items.stream().map(lunarCalendarDateMapper::fromItem)
-                                .peek(d -> d.setMonthSolar(solarYearMonth))
+                                .peek(d -> d.setSolarMonthAggregated(solarYearMonth))
                                 .forEach(lunarCalendarDateRepository::save);
                     });
                     return items;
                 });
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private final LunarCalendarDateRepository lunarCalendarDateRepository;
 
     private final LunarCalendarDateMapper lunarCalendarDateMapper;

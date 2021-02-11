@@ -90,16 +90,20 @@ public class LunarCalendarDate {
     public static final String ATTRIBUTE_NAME_LUNAR_GANZHI_DAY = "lunarGanzhiDay";
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static final String COLUMN_NAME_MONTH_LUNAR = "month_lunar";
+    public static final String COLUMN_NAME_LUNAR_MONTH_AGGREGATED = "lunar_month_aggregated";
 
-    public static final String ATTRIBUTE_NAME_MONTH_LUNAR = "monthLunar";
-
-    // -----------------------------------------------------------------------------------------------------------------
-    public static final String COLUMN_NAME_MONTH_SOLAR = "month_solar";
-
-    public static final String ATTRIBUTE_NAME_MONTH_SOLAR = "monthSolar";
+    public static final String ATTRIBUTE_NAME_LUNAR_MONTH_AGGREGATED = "lunarMonthAggregated";
 
     // -----------------------------------------------------------------------------------------------------------------
+    public static final String COLUMN_NAME_SOLAR_MONTH_AGGREGATED = "solar_month_aggregated";
+
+    public static final String ATTRIBUTE_NAME_SOLAR_MONTH_AGGREGATED = "solarMonthAggregated";
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance.
+     */
     public LunarCalendarDate() {
         super();
     }
@@ -117,8 +121,8 @@ public class LunarCalendarDate {
                + ",lunarGanzhiYear=" + lunarGanzhiYear
                + ",lunarGanzhiMonth=" + lunarGanzhiMonth
                + ",lunarGanzhiDay=" + lunarGanzhiDay
-               + ",groupLunar=" + monthLunar
-               + ",groupSolar=" + monthSolar
+               + ",lunarMonthAggregated=" + lunarMonthAggregated
+               + ",solarMonthAggregated=" + solarMonthAggregated
                + '}';
     }
 
@@ -129,7 +133,7 @@ public class LunarCalendarDate {
     @Column(name = COLUMN_NAME_SOLAR_DATE, nullable = false, insertable = true, updatable = false)
     private LocalDate solarDate;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- lunar
     @Basic(optional = false)
     @Column(name = COLUMN_NAME_LUNAR_YEAR, nullable = false, insertable = true, updatable = false)
     private int lunarYear;
@@ -171,11 +175,11 @@ public class LunarCalendarDate {
     // -----------------------------------------------------------------------------------------------------------------
     @Basic(optional = true)
     @Convert(converter = YearMonthAttributeConverter.class)
-    @Column(name = COLUMN_NAME_MONTH_LUNAR, nullable = true, insertable = true, updatable = true)
-    private YearMonth monthLunar;
+    @Column(name = COLUMN_NAME_LUNAR_MONTH_AGGREGATED, nullable = true, insertable = true, updatable = true)
+    private YearMonth lunarMonthAggregated;
 
     @Basic(optional = true)
     @Convert(converter = YearMonthAttributeConverter.class)
-    @Column(name = COLUMN_NAME_MONTH_SOLAR, nullable = true, insertable = true, updatable = true)
-    private YearMonth monthSolar;
+    @Column(name = COLUMN_NAME_SOLAR_MONTH_AGGREGATED, nullable = true, insertable = true, updatable = true)
+    private YearMonth solarMonthAggregated;
 }

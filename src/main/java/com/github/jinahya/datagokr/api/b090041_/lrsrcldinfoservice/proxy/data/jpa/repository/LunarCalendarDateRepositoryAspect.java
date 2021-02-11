@@ -29,8 +29,8 @@ public class LunarCalendarDateRepositoryAspect {
     public Object aroundSave(final ProceedingJoinPoint joinPoint, final LunarCalendarDate entity) throws Throwable {
         ((LunarCalendarDateRepository) joinPoint.getTarget()).findById(entity.getSolarDate())
                 .ifPresent(existing -> {
-                    Optional.ofNullable(existing.getMonthLunar()).ifPresent(entity::setMonthLunar);
-                    Optional.ofNullable(existing.getMonthSolar()).ifPresent(entity::setMonthSolar);
+                    Optional.ofNullable(existing.getLunarMonthAggregated()).ifPresent(entity::setLunarMonthAggregated);
+                    Optional.ofNullable(existing.getSolarMonthAggregated()).ifPresent(entity::setSolarMonthAggregated);
                 });
         try {
             return joinPoint.proceed();

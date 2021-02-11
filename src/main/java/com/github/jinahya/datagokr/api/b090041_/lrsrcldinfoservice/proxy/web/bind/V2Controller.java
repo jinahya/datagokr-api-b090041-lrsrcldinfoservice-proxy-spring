@@ -69,33 +69,33 @@ public class V2Controller {
     private static ItemModel links(final ItemModel model) {
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_LUNAR)
-                          .slash(model.getLunarYear().getValue())
+                          .slash(model.getLunarYear())
                           .withRel(ItemModel.REL_YEAR_LUNAR));
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_LUNAR)
-                          .slash(model.getLunarYear().getValue())
-                          .slash(model.getLunarMonth().getValue())
+                          .slash(model.getLunarYear())
+                          .slash(model.getLunarMonth())
                           .withRel(ItemModel.REL_MONTH_LUNAR));
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_LUNAR)
-                          .slash(model.getLunarYear().getValue())
-                          .slash(model.getLunarMonth().getValue())
+                          .slash(model.getLunarYear())
+                          .slash(model.getLunarMonth())
                           .slash(model.getLunarDayOfMonth())
                           .withRel(ItemModel.REL_DATE_LUNAR));
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_SOLAR)
-                          .slash(model.getSolarYear().getValue())
+                          .slash(model.getSolarDate().getYear())
                           .withRel(ItemModel.REL_YEAR_SOLAR));
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_SOLAR)
-                          .slash(model.getSolarYear().getValue())
-                          .slash(model.getSolarMonth().getValue())
+                          .slash(model.getSolarDate().getYear())
+                          .slash(model.getSolarDate().getMonth().getValue())
                           .withRel(ItemModel.REL_MONTH_SOLAR));
         model.add(linkTo(V2Controller.class)
                           .slash(PATH_VALUE_SOLAR)
-                          .slash(model.getSolarYear().getValue())
-                          .slash(model.getSolarMonth().getValue())
-                          .slash(model.getSolarDayOfMonth())
+                          .slash(model.getSolarDate().getYear())
+                          .slash(model.getSolarDate().getMonth().getValue())
+                          .slash(model.getSolarDate().getDayOfMonth())
                           .withRel(ItemModel.REL_DATE_SOLAR));
         return model;
     }
@@ -119,7 +119,7 @@ public class V2Controller {
         }
     }
 
-    // ----------------------------------------------------------------------------------------------------- /lunar/uuuu
+    // --------------------------------------------------------------------------------------------------- /readLunar...
     @Operation(tags = {TAG_LUNAR}, summary = "Reads all dates in specified year")
     @GetMapping(path = {'/' + PATH_VALUE_LUNAR + '/' + PATH_TEMPLATE_YEAR},
                 produces = {APPLICATION_JSON_VALUE, APPLICATION_NDJSON_VALUE})
@@ -127,12 +127,10 @@ public class V2Controller {
         final Year year = yearOf(isoYear);
         return fromIterable(lunarCalendarService.getItemsForLunarYear(year))
                 .map(ItemModel::new)
-//                .sort(Response.Body.Item.COMPARING_IN_LUNAR)
                 .map(V2Controller::links)
                 ;
     }
 
-    // --------------------------------------------------------------------------------------------------- /lunar/uuuu/M
     @Operation(tags = {TAG_LUNAR}, summary = "Reads all dates in specified month in a year")
     @GetMapping(path = {'/' + PATH_VALUE_LUNAR + '/' + PATH_TEMPLATE_YEAR + '/' + PATH_TEMPLATE_MONTH},
                 produces = {APPLICATION_JSON_VALUE, APPLICATION_NDJSON_VALUE})
@@ -141,12 +139,10 @@ public class V2Controller {
         final YearMonth yearMonth = YearMonth.of(yearOf(year).getValue(), monthOf(month));
         return fromIterable(lunarCalendarService.getItemsForLunarYearMonth(yearMonth))
                 .map(ItemModel::new)
-//                .sort(Response.Body.Item.COMPARING_IN_LUNAR)
                 .map(V2Controller::links)
                 ;
     }
 
-    // ------------------------------------------------------------------------------------------------- /lunar/uuuu/M/d
     @Operation(tags = {TAG_LUNAR}, summary = "Reads a date of specified year, month, and day-of-month")
     @GetMapping(path = {'/' + PATH_VALUE_LUNAR + '/' + PATH_TEMPLATE_YEAR + '/' + PATH_TEMPLATE_MONTH + '/'
                         + PATH_TEMPLATE_DAY_OF_MONTH},
@@ -162,20 +158,18 @@ public class V2Controller {
                 ;
     }
 
-    // ----------------------------------------------------------------------------------------------------- /solar/uuuu
+    // --------------------------------------------------------------------------------------------------- /readSolar...
     @Operation(tags = {TAG_SOLAR}, summary = "Reads all dates in specified year")
     @GetMapping(path = {'/' + PATH_VALUE_SOLAR + '/' + PATH_TEMPLATE_YEAR},
                 produces = {APPLICATION_JSON_VALUE, APPLICATION_NDJSON_VALUE})
     public Flux<ItemModel> readSolarYear(@PathVariable(PATH_NAME_YEAR) final int isoYear) {
         final Year year = yearOf(isoYear);
         return fromIterable(lunarCalendarService.getItemsForSolarYear(year))
-//                .sort(Response.Body.Item.COMPARING_IN_SOLAR)
                 .map(ItemModel::new)
                 .map(V2Controller::links)
                 ;
     }
 
-    // --------------------------------------------------------------------------------------------------- /solar/uuuu/M
     @Operation(tags = {TAG_SOLAR}, summary = "Reads all dates in specified month in a year")
     @GetMapping(path = {'/' + PATH_VALUE_SOLAR + '/' + PATH_TEMPLATE_YEAR + '/' + PATH_TEMPLATE_MONTH},
                 produces = {APPLICATION_JSON_VALUE, APPLICATION_NDJSON_VALUE})
@@ -184,12 +178,10 @@ public class V2Controller {
         final YearMonth yearMonth = YearMonth.of(yearOf(year).getValue(), monthOf(month));
         return fromIterable(lunarCalendarService.getItemsForSolarYearMonth(yearMonth))
                 .map(ItemModel::new)
-//                .sort(Response.Body.Item.COMPARING_IN_SOLAR)
                 .map(V2Controller::links)
                 ;
     }
 
-    // ------------------------------------------------------------------------------------------------- /solar/uuuu/M/d
     @Operation(tags = {TAG_SOLAR}, summary = "Reads a date of specified year, month, and day-of-month")
     @GetMapping(path = {'/' + PATH_VALUE_SOLAR + '/' + PATH_TEMPLATE_YEAR + '/' + PATH_TEMPLATE_MONTH
                         + '/' + PATH_TEMPLATE_DAY_OF_MONTH},
@@ -214,6 +206,6 @@ public class V2Controller {
                 ;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------- instance fields
     private final LunarCalendarService lunarCalendarService;
 }

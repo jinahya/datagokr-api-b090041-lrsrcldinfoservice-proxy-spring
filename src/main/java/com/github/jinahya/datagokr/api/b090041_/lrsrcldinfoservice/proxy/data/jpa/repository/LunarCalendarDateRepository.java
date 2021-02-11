@@ -14,8 +14,8 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate.COLUMN_NAME_MONTH_SOLAR;
 import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate.COLUMN_NAME_SOLAR_DATE;
+import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate.COLUMN_NAME_SOLAR_MONTH_AGGREGATED;
 import static com.github.jinahya.datagokr.api.b090041_.lrsrcldinfoservice.proxy.data.jpa.domain.LunarCalendarDate.TABLE_NAME;
 
 /**
@@ -35,17 +35,18 @@ public interface LunarCalendarDateRepository
 
     List<LunarCalendarDate> findAllByLunarYearAndLunarMonth(int lunarYear, Month lunarMonth);
 
-    default List<LunarCalendarDate> findAllByLunarYearAndLunarMonth(YearMonth lunarMonth) {
+    default List<LunarCalendarDate> findAllByLunarYearAndLunarMonth(final YearMonth lunarMonth) {
         return findAllByLunarYearAndLunarMonth(lunarMonth.getYear(), Month.from(lunarMonth));
     }
 
     List<LunarCalendarDate> findAllByLunarYearAndLunarMonthAndLunarDay(int lunarYear, Month lunarMonth, int lunarDay);
 
     // -----------------------------------------------------------------------------------------------------------------
-    List<LunarCalendarDate> findAllByMonthLunarOrderByLunarYearAscLunarMonthAscLunarDayAsc(YearMonth monthLunar);
+    List<LunarCalendarDate> findAllByLunarMonthAggregatedOrderByLunarYearAscLunarMonthAscLunarDayAsc(
+            YearMonth lunarMonthAggregated);
 
     // -----------------------------------------------------------------------------------------------------------------
-    List<LunarCalendarDate> findAllByMonthSolarOrderBySolarDateAsc(YearMonth monthSolar);
+    List<LunarCalendarDate> findAllBySolarMonthAggregatedOrderBySolarDateAsc(YearMonth solarMonthAggregated);
 
     // -----------------------------------------------------------------------------------------------------------------
     int deleteAllBySolarDateIsLessThan(LocalDate solarDate);
@@ -58,18 +59,18 @@ public interface LunarCalendarDateRepository
            nativeQuery = true)
     int deleteAllBySolarDateIsLessThanLimitNative(LocalDate solarDate);
 
-    int deleteAllByMonthSolarIsLessThan(LocalDate monthSolar);
+    int deleteAllBySolarMonthAggregatedIsLessThan(LocalDate monthSolar);
 
     @Modifying
     @Query(value = "DELETE FROM " + TABLE_NAME
-                   + " WHERE " + COLUMN_NAME_MONTH_SOLAR + " < FORMATDATETIME(CURRENT_DATE, 'yyyy-MM')"
-                   + " AND " + COLUMN_NAME_MONTH_SOLAR + " < :monthSolar"
+                   + " WHERE " + COLUMN_NAME_SOLAR_MONTH_AGGREGATED + " < FORMATDATETIME(CURRENT_DATE, 'yyyy-MM')"
+                   + " AND " + COLUMN_NAME_SOLAR_MONTH_AGGREGATED + " < :monthSolar"
                    + " LIMIT 1000",
            nativeQuery = true)
-    int deleteAllByMonthSolarIsLessThanLimitNative(String monthSolar);
+    int deleteAllBySolarMonthAggregatedIsLessThanLimitNative(String monthSolar);
 
-    default int deleteAllByMonthSolarIsLessThanLimitNative(YearMonth monthSolar) {
-        return deleteAllByMonthSolarIsLessThanLimitNative(monthSolar.toString());
+    default int deleteAllBySolarMonthAggregatedIsLessThanLimitNative(YearMonth monthSolar) {
+        return deleteAllBySolarMonthAggregatedIsLessThanLimitNative(monthSolar.toString());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -83,17 +84,17 @@ public interface LunarCalendarDateRepository
            nativeQuery = true)
     int deleteAllBySolarDateIsGreaterThanLimitNative(LocalDate solarDate);
 
-    int deleteAllByMonthSolarIsGreaterThan(LocalDate monthSolar);
+    int deleteAllBySolarMonthAggregatedIsGreaterThan(LocalDate monthSolar);
 
     @Modifying
     @Query(value = "DELETE FROM " + TABLE_NAME
-                   + " WHERE " + COLUMN_NAME_MONTH_SOLAR + " > FORMATDATETIME(CURRENT_DATE, 'yyyy-MM')"
-                   + " AND " + COLUMN_NAME_MONTH_SOLAR + " > :monthSolar"
+                   + " WHERE " + COLUMN_NAME_SOLAR_MONTH_AGGREGATED + " > FORMATDATETIME(CURRENT_DATE, 'yyyy-MM')"
+                   + " AND " + COLUMN_NAME_SOLAR_MONTH_AGGREGATED + " > :monthSolar"
                    + " LIMIT 1000",
            nativeQuery = true)
-    int deleteAllByMonthSolarIsGreaterThanLimitNative(String monthSolar);
+    int deleteAllBySolarMonthAggregatedIsGreaterThanLimitNative(String monthSolar);
 
-    default int deleteAllByMonthSolarIsGreaterThanLimitNative(YearMonth monthSolar) {
-        return deleteAllByMonthSolarIsGreaterThanLimitNative(monthSolar.toString());
+    default int deleteAllBySolarMonthAggregatedIsGreaterThanLimitNative(final YearMonth monthSolar) {
+        return deleteAllBySolarMonthAggregatedIsGreaterThanLimitNative(monthSolar.toString());
     }
 }
