@@ -9,6 +9,6 @@ public class CachingConfiguration extends CachingConfigurerSupport {
 
     @Override
     public CacheErrorHandler errorHandler() {
-        return new CacheErrorHandler_();
+        return new LoggingCacheErrorHandler();
     }
 }
