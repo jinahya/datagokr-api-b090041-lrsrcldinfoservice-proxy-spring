@@ -22,19 +22,15 @@ repositories {
 }
 
 ext {
-    springdocVersion = "1.5.3" as Object
+    springdocVersion = '1.5.4' as Object
     mapstructVersion = '1.4.2.Final' as Object
     ioSwaggerCoreV3Version = "2.1.6" as Object
 }
 
 dependencies {
-    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.5.0'
+    implementation 'com.github.jinahya:datagokr-api-b090041-lrsrcldinfoservice-client-spring:0.6.0'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'io.projectreactor:reactor-test'
-//    implementation "io.springfox:springfox-bean-validators:3.0.0"
-//    implementation "io.springfox:springfox-boot-starter:3.0.0"
-//    implementation "io.swagger.core.v3:swagger-core:$ioSwaggerCoreV3Version"
-//    implementation "jakarta.json.bind:jakarta.json.bind-api"
     implementation 'javax.cache:cache-api'
     runtimeOnly 'org.ehcache:ehcache'
     implementation "org.mapstruct:mapstruct:$mapstructVersion"
